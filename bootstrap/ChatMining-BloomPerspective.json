@@ -713,7 +713,7 @@
         3
       ],
       "createdAt": 1701074378953,
-      "cypher": "MATCH (q:Message {role: 'user'}) WHERE id(q) in $nodes\n\nCALL chat.ask(q, 'gpt-3.5-turbo') YIELD ans, r\n\n// Check the \"Write transaction\" box above, or this scene action will do nothing.\n// If no that checkbox there, you need to enable experimental features of Bloom: \"Allow write transactions\".\n// If unable to do above, uncomment the line below:\n// MERGE (q)-[r1:DECOHERES]->(ans)\n\nRETURN ans, r\n",
+      "cypher": "MATCH (q:Message {role: 'user'}) WHERE id(q) in $nodes\n\nCALL chat.ask(q) YIELD ans, r\n\n// Check the \"Write transaction\" box above, or this scene action will do nothing.\n// If no that checkbox there, you need to enable experimental features of Bloom: \"Allow write transactions\".\n// If unable to do above, uncomment the line below:\n// MERGE (q)-[r1:DECOHERES]->(ans)\n\nRETURN ans, r\n",
       "hasCypherErrors": false,
       "id": "80719d70-8d00-11ee-80f3-e9a24a5b2848",
       "isUpdateQuery": true,

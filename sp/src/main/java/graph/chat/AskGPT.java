@@ -37,11 +37,11 @@ public class AskGPT {
   public Log log;
 
   @Procedure(name = "chat.ask", mode = Mode.WRITE)
-  @Description("Ask GPT about a user message, with its full conversation history.")
-  public Stream<ContMsgResult> ask(
-      @Name("node") Node questMsg, @Name("model") String model) {
-    if (model == null)
-      model = "gpt-3.5-turbo";
+  @Description("Ask GPT about a user message, with its full conversation history included.")
+  public Stream<AskResult> ask(
+      @Name("quest") Node questMsg,
+      @Name(value = "model", defaultValue = "gpt-3.5-turbo") String model) {
+    assert model != null : "use null model?!";
 
     log.info("Asking [" + model + "] for quest: " + questMsg.getProperty("content"));
 
@@ -71,7 +71,7 @@ public class AskGPT {
 
       // use an eager loop instead of lazy stream,
       // so errors can be caught and logged by us
-      ContMsgResult[] results = new ContMsgResult[completion.choices().length];
+      AskResult[] results = new AskResult[completion.choices().length];
       for (int i = 0; i < results.length; i++) {
         final var choice = completion.choices()[i];
 
@@ -98,7 +98,7 @@ public class AskGPT {
 
         Relationship r = questMsg.createRelationshipTo(ans, DECOHERES);
 
-        results[i] = new ContMsgResult(ans, r);
+        results[i] = new AskResult(ans, r);
       }
       return Arrays.stream(results);
 
@@ -108,7 +108,7 @@ public class AskGPT {
     return Stream.empty();
   }
 
-  public static record ContMsgResult(Node ans, Relationship r) {
+  public static record AskResult(Node ans, Relationship r) {
   }
 
 }
