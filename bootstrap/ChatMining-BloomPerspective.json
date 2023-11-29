@@ -713,7 +713,7 @@
         3
       ],
       "createdAt": 1701074378953,
-      "cypher": "MATCH (q:Message {role: 'user'}) WHERE id(q) in $nodes\n\nCALL chat.ask(q) YIELD ans, r\n\n// Check the \"Write transaction\" box above, or this scene action will do nothing.\n// If no that checkbox there, you need to enable experimental features of Bloom: \"Allow write transactions\".\n// If unable to do above, uncomment the line below:\n// MERGE (q)-[r1:DECOHERES]->(ans)\n\nRETURN ans, r\n",
+      "cypher": "MATCH (q:Message {role: 'user'}) WHERE id(q) in $nodes\n\nCALL chat.ask(q) YIELD ans, r\n\n// Every time you visit the definition of this scene action,\n// mind to check the \"Write transaction\" box above, or this scene action will do nothing.\n// If no that checkbox there, you need to enable experimental features of Bloom: \"Allow write transactions\".\n// If unable to do above, just leave the line below uncommented\nMERGE (q)-[r1:DECOHERES]->(ans)\n\nRETURN ans, r\n",
       "hasCypherErrors": false,
       "id": "80719d70-8d00-11ee-80f3-e9a24a5b2848",
       "isUpdateQuery": true,
@@ -723,11 +723,11 @@
     {
       "categories": null,
       "createdAt": 1700755255620,
-      "cypher": "MATCH (q:Message) WHERE id(q) in $nodes\n\nMATCH p = (q)<-[:DECOHERES*]-(:Message)\n\nRETURN p\n",
+      "cypher": "MATCH (q:Message) WHERE id(q) in $nodes\n\nMATCH p = (h:Message)-[:DECOHERES*]->(q:Message)\nWHERE NOT (:Message)-[:DECOHERES]->(h)\n\nOPTIONAL MATCH tp = (t:Topic)-[:INITIATES]->(h)\nOPTIONAL MATCH tgp = (t)-[:HAS_TAG]->(tg:Tag)\n\nRETURN p, tp, tgp\n",
       "hasCypherErrors": false,
       "id": "7c1db040-8a19-11ee-a9d6-d9070732b86e",
       "isUpdateQuery": false,
-      "name": "Show conversation history",
+      "name": "Show full conversation",
       "relationshipTypes": null
     },
     {

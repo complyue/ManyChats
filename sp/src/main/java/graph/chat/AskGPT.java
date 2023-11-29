@@ -48,9 +48,9 @@ public class AskGPT {
     try {
       List<Message> messages = new ArrayList<>();
       Result histResult = tx.execute(
-          "MATCH p = (h:Message)-[:DECOHERES*]->(q:Message)" +
-              " WHERE elementId(q) = $questId"
-              + " AND NOT (:Message)-[:DECOHERES]->(h)"
+          "MATCH (q:Message) WHERE elementId(q) = $questId"
+              + " MATCH p = (h:Message)-[:DECOHERES*]->(q)"
+              + " WHERE NOT (:Message)-[:DECOHERES]->(h)"
               + " RETURN p",
           Map.of("questId", questMsg.getElementId()));
       while (histResult.hasNext()) {
