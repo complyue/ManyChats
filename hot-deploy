@@ -1,0 +1,5 @@
+#!/usr/bin/env bash
+
+cd $(dirname "$0")
+
+./gradlew shadow && cp sp/build/libs/*.jar "$NEO4J_HOME/plugins/" && "$NEO4J_HOME/bin/neo4j" restart

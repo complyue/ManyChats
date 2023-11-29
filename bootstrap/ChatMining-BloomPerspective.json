@@ -1,0 +1,819 @@
+{
+  "categories": [
+    {
+      "captionKeys": [],
+      "captions": [
+        {
+          "inTooltip": false,
+          "isCaption": false,
+          "key": "Message",
+          "styles": [],
+          "type": "label"
+        },
+        {
+          "inTooltip": false,
+          "isCaption": true,
+          "isGdsData": false,
+          "key": "role",
+          "styles": [],
+          "type": "property"
+        },
+        {
+          "inTooltip": false,
+          "isCaption": true,
+          "isGdsData": false,
+          "key": "msgid",
+          "styles": [],
+          "type": "property"
+        },
+        {
+          "inTooltip": true,
+          "isCaption": false,
+          "isGdsData": false,
+          "key": "content",
+          "styles": [],
+          "type": "property"
+        },
+        {
+          "inTooltip": false,
+          "isCaption": false,
+          "isGdsData": false,
+          "key": "choice.index",
+          "styles": [],
+          "type": "property"
+        },
+        {
+          "inTooltip": false,
+          "isCaption": false,
+          "isGdsData": false,
+          "key": "created",
+          "styles": [],
+          "type": "property"
+        },
+        {
+          "inTooltip": false,
+          "isCaption": false,
+          "isGdsData": false,
+          "key": "finish_reason",
+          "styles": [],
+          "type": "property"
+        },
+        {
+          "inTooltip": false,
+          "isCaption": false,
+          "isGdsData": false,
+          "key": "model",
+          "styles": [],
+          "type": "property"
+        },
+        {
+          "inTooltip": false,
+          "isCaption": false,
+          "isGdsData": false,
+          "key": "usage.completion",
+          "styles": [],
+          "type": "property"
+        },
+        {
+          "inTooltip": false,
+          "isCaption": false,
+          "isGdsData": false,
+          "key": "usage.prompt",
+          "styles": [],
+          "type": "property"
+        },
+        {
+          "inTooltip": false,
+          "isCaption": false,
+          "isGdsData": false,
+          "key": "usage.total",
+          "styles": [],
+          "type": "property"
+        }
+      ],
+      "color": "#000000",
+      "createdAt": 1700749722376,
+      "icon": "no-icon",
+      "id": 3,
+      "labels": [
+        "Message"
+      ],
+      "lastEditedAt": 1701251096277,
+      "name": "Message",
+      "properties": [
+        {
+          "dataType": "string",
+          "exclude": false,
+          "name": "content"
+        },
+        {
+          "dataType": "string",
+          "exclude": false,
+          "name": "role"
+        },
+        {
+          "dataType": "bigint",
+          "exclude": false,
+          "name": "usage.completion"
+        },
+        {
+          "dataType": "bigint",
+          "exclude": false,
+          "name": "usage.total"
+        },
+        {
+          "dataType": "string",
+          "exclude": false,
+          "name": "finish_reason"
+        },
+        {
+          "dataType": "DateTime",
+          "exclude": false,
+          "name": "created"
+        },
+        {
+          "dataType": "bigint",
+          "exclude": false,
+          "name": "usage.prompt"
+        },
+        {
+          "dataType": "string",
+          "exclude": false,
+          "name": "model"
+        },
+        {
+          "dataType": "bigint",
+          "exclude": false,
+          "name": "choice.index"
+        },
+        {
+          "dataType": "string",
+          "exclude": false,
+          "name": "msgid"
+        }
+      ],
+      "size": 1,
+      "styleRules": [
+        {
+          "applyCaption": false,
+          "applyColor": true,
+          "applySize": false,
+          "basedOn": "role_string",
+          "captions": [
+            {
+              "inTooltip": false,
+              "isCaption": false,
+              "key": "Message",
+              "styles": [],
+              "type": "label"
+            },
+            {
+              "inTooltip": false,
+              "isCaption": true,
+              "isGdsData": false,
+              "key": "role",
+              "styles": [],
+              "type": "property"
+            },
+            {
+              "inTooltip": true,
+              "isCaption": false,
+              "isGdsData": false,
+              "key": "content",
+              "styles": [],
+              "type": "property"
+            }
+          ],
+          "color": "#D9D9D9",
+          "condition": "equals",
+          "conditionValue": "user",
+          "existingValues": [],
+          "id": "rule:1700750008371",
+          "isTimeZoneConvertEnabled": false,
+          "maxColor": "#945B3E",
+          "maxPoint": "unprocessed",
+          "maxSize": 2,
+          "midColor": "#F79767",
+          "minColor": "#FDE0D1",
+          "minPoint": "unprocessed",
+          "minSize": 1,
+          "rangeValue": null,
+          "selectedTimeZone": "Z",
+          "size": 1,
+          "textAlign": "center",
+          "textSize": 1,
+          "type": "single",
+          "valuesMapper": []
+        },
+        {
+          "applyCaption": false,
+          "applyColor": true,
+          "applySize": true,
+          "basedOn": "role_string",
+          "captions": [
+            {
+              "inTooltip": false,
+              "isCaption": false,
+              "key": "Message",
+              "styles": [],
+              "type": "label"
+            },
+            {
+              "inTooltip": false,
+              "isCaption": true,
+              "isGdsData": false,
+              "key": "role",
+              "styles": [],
+              "type": "property"
+            },
+            {
+              "inTooltip": true,
+              "isCaption": false,
+              "isGdsData": false,
+              "key": "content",
+              "styles": [],
+              "type": "property"
+            }
+          ],
+          "color": "#4C8EDA",
+          "condition": "equals",
+          "conditionValue": "system",
+          "existingValues": [
+            "system"
+          ],
+          "id": "rule:1700750435345",
+          "isTimeZoneConvertEnabled": false,
+          "maxColor": "#945B3E",
+          "maxPoint": "unprocessed",
+          "maxSize": 2,
+          "midColor": "#F79767",
+          "minColor": "#FDE0D1",
+          "minPoint": "unprocessed",
+          "minSize": 1,
+          "rangeValue": null,
+          "selectedTimeZone": "Z",
+          "size": 2,
+          "textAlign": "center",
+          "textSize": 1,
+          "type": "single",
+          "valuesMapper": [
+            {
+              "color": "#FFE081",
+              "hasMore": false,
+              "value": "system"
+            }
+          ]
+        },
+        {
+          "applyCaption": false,
+          "applyColor": true,
+          "applySize": false,
+          "basedOn": "role_string",
+          "captions": [
+            {
+              "inTooltip": false,
+              "isCaption": false,
+              "key": "Message",
+              "styles": [],
+              "type": "label"
+            },
+            {
+              "inTooltip": false,
+              "isCaption": false,
+              "isGdsData": false,
+              "key": "choice.index",
+              "styles": [],
+              "type": "property"
+            },
+            {
+              "inTooltip": false,
+              "isCaption": false,
+              "isGdsData": false,
+              "key": "content",
+              "styles": [],
+              "type": "property"
+            },
+            {
+              "inTooltip": false,
+              "isCaption": false,
+              "isGdsData": false,
+              "key": "created",
+              "styles": [],
+              "type": "property"
+            },
+            {
+              "inTooltip": false,
+              "isCaption": false,
+              "isGdsData": false,
+              "key": "finish_reason",
+              "styles": [],
+              "type": "property"
+            },
+            {
+              "inTooltip": false,
+              "isCaption": false,
+              "isGdsData": false,
+              "key": "model",
+              "styles": [],
+              "type": "property"
+            },
+            {
+              "inTooltip": false,
+              "isCaption": false,
+              "isGdsData": false,
+              "key": "role",
+              "styles": [],
+              "type": "property"
+            },
+            {
+              "inTooltip": false,
+              "isCaption": false,
+              "isGdsData": false,
+              "key": "usage.completion",
+              "styles": [],
+              "type": "property"
+            },
+            {
+              "inTooltip": false,
+              "isCaption": false,
+              "isGdsData": false,
+              "key": "usage.prompt",
+              "styles": [],
+              "type": "property"
+            },
+            {
+              "inTooltip": false,
+              "isCaption": false,
+              "isGdsData": false,
+              "key": "usage.total",
+              "styles": [],
+              "type": "property"
+            }
+          ],
+          "color": "#8DCC93",
+          "condition": "equals",
+          "conditionValue": "assistant",
+          "existingValues": [
+            "system",
+            "user"
+          ],
+          "id": "rule:1700843804681",
+          "isTimeZoneConvertEnabled": false,
+          "maxColor": "#557A58",
+          "maxPoint": "unprocessed",
+          "maxSize": 2,
+          "midColor": "#8DCC93",
+          "minColor": "#DDF0DF",
+          "minPoint": "unprocessed",
+          "minSize": 1,
+          "rangeValue": null,
+          "selectedTimeZone": "Z",
+          "size": 1,
+          "textAlign": "center",
+          "textSize": 1,
+          "type": "single",
+          "valuesMapper": [
+            {
+              "color": "#FFE081",
+              "hasMore": false,
+              "value": "system"
+            },
+            {
+              "color": "#C990C0",
+              "hasMore": false,
+              "value": "user"
+            }
+          ]
+        }
+      ],
+      "textAlign": "top",
+      "textSize": 1
+    },
+    {
+      "captionKeys": [],
+      "captions": [
+        {
+          "inTooltip": false,
+          "isCaption": false,
+          "key": "Topic",
+          "styles": [],
+          "type": "label"
+        },
+        {
+          "inTooltip": false,
+          "isCaption": true,
+          "isGdsData": false,
+          "key": "summary",
+          "styles": [],
+          "type": "property"
+        },
+        {
+          "inTooltip": true,
+          "isCaption": false,
+          "isGdsData": false,
+          "key": "description",
+          "styles": [],
+          "type": "property"
+        }
+      ],
+      "color": "#FFE081",
+      "createdAt": 1700746754745,
+      "icon": "E862F2DF-ACAD-434A-BB3C-8A00ED34AE6D",
+      "id": 1,
+      "labels": [
+        "Topic"
+      ],
+      "lastEditedAt": 1701251085793,
+      "name": "Topic",
+      "properties": [
+        {
+          "dataType": "string",
+          "exclude": false,
+          "name": "description"
+        },
+        {
+          "dataType": "string",
+          "exclude": false,
+          "name": "summary"
+        }
+      ],
+      "size": 4,
+      "styleRules": [],
+      "textAlign": "top",
+      "textSize": 1
+    },
+    {
+      "captionKeys": [],
+      "captions": [
+        {
+          "inTooltip": false,
+          "isCaption": false,
+          "key": "Tag",
+          "styles": [],
+          "type": "label"
+        },
+        {
+          "inTooltip": false,
+          "isCaption": true,
+          "isGdsData": false,
+          "key": "name",
+          "styles": [],
+          "type": "property"
+        },
+        {
+          "inTooltip": true,
+          "isCaption": false,
+          "isGdsData": false,
+          "key": "description",
+          "styles": [],
+          "type": "property"
+        }
+      ],
+      "color": "#C990C0",
+      "createdAt": 1700746754745,
+      "icon": "no-icon",
+      "id": 2,
+      "labels": [
+        "Tag"
+      ],
+      "lastEditedAt": 1701251257261,
+      "name": "Tag",
+      "properties": [
+        {
+          "dataType": "string",
+          "exclude": false,
+          "name": "name"
+        },
+        {
+          "dataType": "string",
+          "exclude": false,
+          "name": "description"
+        }
+      ],
+      "size": 1,
+      "styleRules": [],
+      "textAlign": "top",
+      "textSize": 1
+    }
+  ],
+  "createdAt": 1701250896402,
+  "hiddenCategories": [],
+  "hiddenRelationshipTypes": [],
+  "hideUncategorisedData": false,
+  "id": "7d0b1f20-8e9b-11ee-8d8b-070cc08f3878",
+  "isAuto": true,
+  "labels": {
+    "Message": [
+      {
+        "dataType": "string",
+        "propertyKey": "role",
+        "type": "Message"
+      },
+      {
+        "dataType": "string",
+        "propertyKey": "content",
+        "type": "Message"
+      },
+      {
+        "dataType": "string",
+        "propertyKey": "msgid",
+        "type": "Message"
+      }
+    ],
+    "Tag": [
+      {
+        "dataType": "string",
+        "propertyKey": "description",
+        "type": "Tag"
+      },
+      {
+        "dataType": "string",
+        "propertyKey": "name",
+        "type": "Tag"
+      }
+    ],
+    "Topic": [
+      {
+        "dataType": "string",
+        "propertyKey": "description",
+        "type": "Topic"
+      },
+      {
+        "dataType": "string",
+        "propertyKey": "summary",
+        "type": "Topic"
+      }
+    ]
+  },
+  "lastEditedAt": 1701250896402,
+  "metadata": {
+    "indexes": [
+      {
+        "label": "Message",
+        "propertyKeys": [
+          {
+            "key": "msgid",
+            "metadataProp": false
+          },
+          {
+            "key": "role",
+            "metadataProp": true
+          },
+          {
+            "key": "content",
+            "metadataProp": true
+          }
+        ],
+        "type": "native"
+      },
+      {
+        "label": null,
+        "propertyKeys": [],
+        "type": "native"
+      },
+      {
+        "isMetadataPropIndex": true,
+        "label": "Topic",
+        "propertyKeys": [
+          {
+            "key": "description",
+            "metadataProp": true
+          },
+          {
+            "key": "summary",
+            "metadataProp": true
+          }
+        ],
+        "type": "native"
+      },
+      {
+        "isMetadataPropIndex": true,
+        "label": "Tag",
+        "propertyKeys": [
+          {
+            "key": "name",
+            "metadataProp": true
+          }
+        ],
+        "type": "native"
+      }
+    ],
+    "pathSegments": [
+      {
+        "relationshipType": "DECOHERES",
+        "source": "Message",
+        "target": "Message"
+      },
+      {
+        "relationshipType": "INITIATES",
+        "source": "Topic",
+        "target": "Message"
+      },
+      {
+        "relationshipType": "HAS_TAG",
+        "source": "Topic",
+        "target": "Tag"
+      }
+    ],
+    "stats": {
+      "labels": {},
+      "relationshipTypes": {
+        "DECOHERES": 1,
+        "HAS_TAG": 1,
+        "INITIATES": 1
+      }
+    }
+  },
+  "name": "ChatMining",
+  "palette": {
+    "colors": [
+      "#FFE081",
+      "#C990C0",
+      "#F79767",
+      "#57C7E3",
+      "#F16667",
+      "#D9C8AE",
+      "#8DCC93",
+      "#ECB5C9",
+      "#4C8EDA",
+      "#FFC454",
+      "#DA7194",
+      "#569480",
+      "#848484",
+      "#D9D9D9"
+    ],
+    "currentIndex": 4
+  },
+  "parentPerspectiveId": "05277000-89e9-11ee-983f-4b8420611417",
+  "relationshipTypes": [
+    {
+      "captionKeys": [],
+      "captions": [
+        {
+          "inTooltip": true,
+          "isCaption": true,
+          "key": "HAS_TAG",
+          "styles": [],
+          "type": "relationship"
+        }
+      ],
+      "color": "#848484",
+      "id": "HAS_TAG",
+      "name": "HAS_TAG",
+      "properties": [],
+      "size": 1,
+      "styleRules": [],
+      "textAlign": "top",
+      "textSize": 1
+    },
+    {
+      "captionKeys": [],
+      "captions": [
+        {
+          "inTooltip": true,
+          "isCaption": true,
+          "key": "INITIATES",
+          "styles": [],
+          "type": "relationship"
+        }
+      ],
+      "color": "#848484",
+      "id": "INITIATES",
+      "name": "INITIATES",
+      "properties": [],
+      "size": 1,
+      "styleRules": [],
+      "textAlign": "top",
+      "textSize": 1
+    },
+    {
+      "captionKeys": [],
+      "captions": [
+        {
+          "inTooltip": true,
+          "isCaption": true,
+          "key": "DECOHERES",
+          "styles": [],
+          "type": "relationship"
+        }
+      ],
+      "color": "#848484",
+      "id": "DECOHERES",
+      "name": "DECOHERES",
+      "properties": [],
+      "size": 1,
+      "styleRules": [],
+      "textAlign": "top",
+      "textSize": 1
+    }
+  ],
+  "sceneActions": [
+    {
+      "categories": [
+        3
+      ],
+      "createdAt": 1701074378953,
+      "cypher": "MATCH (q:Message {role: 'user'}) WHERE id(q) in $nodes\n\nCALL chat.ask(q, 'gpt-3.5-turbo') YIELD ans, r\n\n// Check the \"Write transaction\" box above, or this scene action will do nothing.\n// If no that checkbox there, you need to enable experimental features of Bloom: \"Allow write transactions\".\n// If unable to do above, uncomment the line below:\n// MERGE (q)-[r1:DECOHERES]->(ans)\n\nRETURN ans, r\n",
+      "hasCypherErrors": false,
+      "id": "80719d70-8d00-11ee-80f3-e9a24a5b2848",
+      "isUpdateQuery": true,
+      "name": "Quest GPT",
+      "relationshipTypes": null
+    },
+    {
+      "categories": null,
+      "createdAt": 1700755255620,
+      "cypher": "MATCH (q:Message) WHERE id(q) in $nodes\n\nMATCH p = (q)<-[:DECOHERES*]-(:Message)\n\nRETURN p\n",
+      "hasCypherErrors": false,
+      "id": "7c1db040-8a19-11ee-a9d6-d9070732b86e",
+      "isUpdateQuery": false,
+      "name": "Show conversation history",
+      "relationshipTypes": null
+    },
+    {
+      "categories": null,
+      "createdAt": 1700752286066,
+      "cypher": "MATCH (q:Message {role: 'user'}) WHERE id(q) in $nodes\n\nCREATE (a:Message {msgid: chat.msgid(), role: 'assistant', content: 'The answer to your question is ...'})\nCREATE  (q)-[r:DECOHERES]->(a)\n\nRETURN a, r\n",
+      "hasCypherErrors": false,
+      "id": "921fb520-8a12-11ee-81f2-916d7027505b",
+      "isUpdateQuery": true,
+      "name": "Fake Answer",
+      "relationshipTypes": null
+    },
+    {
+      "categories": null,
+      "createdAt": 1700752593636,
+      "cypher": "MATCH (q1:Message {role: 'user'}) WHERE id(q1) in $nodes\n\nCREATE (q2:Message {msgid: chat.msgid(), role: 'user', content: 'Also I want to know ...'})\nCREATE p = (q1)-[:DECOHERES]->(q2)\n\nRETURN p\n",
+      "hasCypherErrors": false,
+      "id": "49732a40-8a13-11ee-81f2-916d7027505b",
+      "isUpdateQuery": true,
+      "name": "More Quest",
+      "relationshipTypes": null
+    },
+    {
+      "categories": null,
+      "createdAt": 1700751695990,
+      "cypher": "MATCH (c:Message) WHERE id(c) in $nodes\nAND c.role IN ['system', 'assistant'] \n\nCREATE (q:Message {msgid: chat.msgid(), role: 'user', content: 'Please tell me ...'})\nCREATE p = (c)-[:DECOHERES]->(q)\n\nRETURN p\n",
+      "hasCypherErrors": false,
+      "id": "32694160-8a11-11ee-81f2-916d7027505b",
+      "isUpdateQuery": true,
+      "name": "New Quest",
+      "relationshipTypes": null
+    },
+    {
+      "categories": [
+        1
+      ],
+      "createdAt": 1700736539737,
+      "cypher": "MATCH (t:Topic) WHERE id(t) in $nodes\n\nCREATE (m:Message {msgid: chat.msgid(), role: 'system', content: 'You as the assistant should ...'})\nCREATE p = (t)-[:INITIATES]->(m)\n\nRETURN p\n",
+      "hasCypherErrors": false,
+      "id": "e8946d80-89ed-11ee-8252-81adda452279",
+      "isUpdateQuery": true,
+      "name": "Initiate conversation",
+      "relationshipTypes": null
+    }
+  ],
+  "templates": [
+    {
+      "createdAt": 1700755437845,
+      "cypher": "CREATE (t:Topic {\n  summary: 'SomeBrilliantIdea',\n  description: 'Some Brilliant Idea'\n})\nRETURN t\n",
+      "hasCypherErrors": false,
+      "id": "tmpl:1700755437845",
+      "isUpdateQuery": true,
+      "name": "Create a new topic",
+      "params": [],
+      "text": "Create Topic"
+    },
+    {
+      "createdAt": 1700754621840,
+      "cypher": "MATCH (m:Message)\nWHERE NOT (m)-[:DECOHERES]->(:Message)\nRETURN m\n",
+      "hasCypherErrors": false,
+      "id": "tmpl:1700754621840",
+      "isUpdateQuery": false,
+      "name": "Show all conversations",
+      "params": [],
+      "text": "Show conversations"
+    },
+    {
+      "createdAt": 1700754358560,
+      "cypher": "MATCH (t:Topic) RETURN t\n",
+      "hasCypherErrors": false,
+      "id": "tmpl:1700754358560",
+      "isUpdateQuery": false,
+      "name": "Show all topics",
+      "params": [],
+      "text": "Show topics"
+    },
+    {
+      "createdAt": 1700746851868,
+      "cypher": "MATCH (t:Tag) RETURN t\n",
+      "hasCypherErrors": false,
+      "id": "tmpl:1700746851868",
+      "isUpdateQuery": false,
+      "name": "Show all tags",
+      "params": [],
+      "text": "Show tags"
+    }
+  ],
+  "version": "2.11.0"
+}

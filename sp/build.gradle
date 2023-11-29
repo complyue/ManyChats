@@ -1,0 +1,57 @@
+plugins {
+    id 'java'
+    id 'com.github.johnrengelman.shadow'
+}
+
+base {
+    archivesName = "ManyChats"
+}
+
+group = 'graph.chat'
+version = '0.1.0'
+description = """Neo4j customizations to enable ChatGPT conversations with a graph as backing storage & historic log"""
+
+ext {
+    neo4jVersion = '5.12.0'
+    okhttpVersion = '4.12.0'
+    jacksonVersion = '2.15.3'
+}
+
+repositories {
+    // Use Maven Central for resolving dependencies.
+    mavenCentral()
+}
+
+dependencies {
+    implementation group: 'com.squareup.okhttp3', name: 'okhttp', version: okhttpVersion
+    implementation group: 'com.fasterxml.jackson.core', name: 'jackson-databind', version: jacksonVersion
+
+    // Use JUnit Jupiter for testing.
+    testImplementation 'org.junit.jupiter:junit-jupiter:5.9.3'
+    testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
+
+    annotationProcessor group: 'org.neo4j', name: 'neo4j', version: neo4jVersion
+    compileOnly group: 'org.neo4j', name: 'neo4j', version: neo4jVersion
+
+    configurations.all {
+        exclude group: 'org.slf4j', module: 'slf4j-nop'
+    }
+}
+
+java {
+    toolchain {
+        languageVersion = JavaLanguageVersion.of(17)
+    }
+    sourceCompatibility = JavaVersion.VERSION_17
+    targetCompatibility = JavaVersion.VERSION_17
+}
+
+shadowJar {
+    archiveClassifier.set('neo4j-sp')
+
+    mergeServiceFiles()
+}
+
+tasks.named('test') {
+    useJUnitPlatform()
+}
