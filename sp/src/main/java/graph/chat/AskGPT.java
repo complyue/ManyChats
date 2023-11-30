@@ -43,22 +43,22 @@ public class AskGPT {
       @Name(value = "model", defaultValue = "gpt-3.5-turbo") String model) {
     assert model != null : "use null model?!";
 
-    log.info("Asking [" + model + "] for quest: " + questMsg.getProperty("content"));
-
     try {
+      log.debug("Asking [" + model + "] for quest: " + questMsg.getProperty("content"));
+
       List<Message> messages = new ArrayList<>();
       Result histResult = tx.execute(
-          "MATCH (q:Message) WHERE elementId(q) = $questId"
+          "MATCH (q:Message) WHERE elementId(q) = $msgEID"
               + " MATCH p = (h:Message)-[:DECOHERES*]->(q)"
               + " WHERE NOT (:Message)-[:DECOHERES]->(h)"
               + " RETURN p",
-          Map.of("questId", questMsg.getElementId()));
+          Map.of("msgEID", questMsg.getElementId()));
       while (histResult.hasNext()) {
         Map<String, Object> row = histResult.next();
         Path path = (Path) row.get("p");
-        for (Node n : path.reverseNodes()) {
-          String role = (String) n.getProperty("role");
-          String content = (String) n.getProperty("content");
+        for (Node m : path.reverseNodes()) {
+          String role = (String) m.getProperty("role");
+          String content = (String) m.getProperty("content");
           messages.add(new Message(role, content));
         }
         break;
@@ -82,6 +82,7 @@ public class AskGPT {
         setNodeProp(ans, "role", choice.message().role());
         setNodeProp(ans, "content", choice.message().content());
 
+        // cypher: datetime({epochSeconds: created})
         setNodeProp(ans, "created",
             ZonedDateTime.ofInstant(Instant.ofEpochSecond(completion.created()), ZoneOffset.UTC));
         setNodeProp(ans, "model", completion.model());
@@ -94,7 +95,7 @@ public class AskGPT {
         setNodeProp(ans, "finish_reason", choice.finish_reason());
         setNodeProp(ans, "choice.index", choice.index());
 
-        log.info("Got answer #" + i + ": " + choice.message().content());
+        log.debug("Got answer #" + i + ": " + choice.message().content());
 
         Relationship r = questMsg.createRelationshipTo(ans, DECOHERES);
 
