@@ -479,18 +479,18 @@
           "type": "label"
         },
         {
-          "inTooltip": true,
+          "inTooltip": false,
           "isCaption": true,
           "isGdsData": false,
-          "key": "description",
+          "key": "summary",
           "styles": [],
           "type": "property"
         },
         {
-          "inTooltip": false,
+          "inTooltip": true,
           "isCaption": false,
           "isGdsData": false,
-          "key": "summary",
+          "key": "description",
           "styles": [],
           "type": "property"
         }
@@ -533,17 +533,17 @@
         },
         {
           "inTooltip": false,
-          "isCaption": false,
+          "isCaption": true,
           "isGdsData": false,
-          "key": "description",
+          "key": "name",
           "styles": [],
           "type": "property"
         },
         {
           "inTooltip": true,
-          "isCaption": true,
+          "isCaption": false,
           "isGdsData": false,
-          "key": "name",
+          "key": "description",
           "styles": [],
           "type": "property"
         }
@@ -575,11 +575,11 @@
       "textSize": 1
     }
   ],
-  "createdAt": 1701270622659,
+  "createdAt": 1701361021419,
   "hiddenCategories": [],
   "hiddenRelationshipTypes": [],
   "hideUncategorisedData": false,
-  "id": "6acf1130-8ec9-11ee-b834-3358bed118c0",
+  "id": "e4ab52c0-8f9b-11ee-8cd3-77496851a9c5",
   "isAuto": true,
   "labels": {
     "Conversation": [
@@ -646,7 +646,7 @@
       }
     ]
   },
-  "lastEditedAt": 1701270622659,
+  "lastEditedAt": 1701361021419,
   "metadata": {
     "indexes": [
       {
@@ -751,7 +751,7 @@
     "stats": {
       "labels": {},
       "relationshipTypes": {
-        "DECOHERES": 2,
+        "DECOHERES": 4,
         "HAS_TAG": 1,
         "INITIATES": 1,
         "SNAPSHOT": 1
@@ -778,7 +778,7 @@
     ],
     "currentIndex": 5
   },
-  "parentPerspectiveId": "7d0b1f20-8e9b-11ee-8d8b-070cc08f3878",
+  "parentPerspectiveId": "6acf1130-8ec9-11ee-b834-3358bed118c0",
   "relationshipTypes": [
     {
       "captionKeys": [],
