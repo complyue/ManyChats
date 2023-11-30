@@ -1,6 +1,6 @@
 package graph.chat;
 
-import static graph.chat.Schema.setNodeProp;
+import static graph.chat.Schema.setNonNullProp;
 
 import java.time.Instant;
 import java.time.ZoneOffset;
@@ -71,29 +71,22 @@ public class AskGPT {
       for (int i = 0; i < results.length; i++) {
         final var choice = completion.choices()[i];
 
-        Node ans = tx.createNode(Schema.Message);
-
-        ans.setProperty("msgid", MsgID.genUUID());
-
-        setNodeProp(ans, "role", choice.message().role());
-        setNodeProp(ans, "content", choice.message().content());
-
-        // cypher: datetime({epochSeconds: created})
-        setNodeProp(ans, "created",
-            ZonedDateTime.ofInstant(Instant.ofEpochSecond(completion.created()), ZoneOffset.UTC));
-        setNodeProp(ans, "model", completion.model());
-        setNodeProp(ans, "system_fingerprint", completion.system_fingerprint());
-
-        setNodeProp(ans, "usage.completion", completion.usage().completion_tokens());
-        setNodeProp(ans, "usage.prompt", completion.usage().prompt_tokens());
-        setNodeProp(ans, "usage.total", completion.usage().total_tokens());
-
-        setNodeProp(ans, "finish_reason", choice.finish_reason());
-        setNodeProp(ans, "choice.index", choice.index());
-
         log.debug("Got answer #" + i + ": " + choice.message().content());
 
+        Node ans = tx.createNode(Schema.Message);
+        ans.setProperty("msgid", MsgID.genUUID());
+        choice.message().updateToNode(ans);
+
         Relationship r = questMsg.createRelationshipTo(ans, Schema.DECOHERES);
+        setNonNullProp(r, "created", // cypher: datetime({epochSeconds: created})
+            ZonedDateTime.ofInstant(Instant.ofEpochSecond(completion.created()), ZoneOffset.UTC));
+        setNonNullProp(r, "model", completion.model());
+        setNonNullProp(r, "system_fingerprint", completion.system_fingerprint());
+        setNonNullProp(r, "usage.completion", completion.usage().completion_tokens());
+        setNonNullProp(r, "usage.prompt", completion.usage().prompt_tokens());
+        setNonNullProp(r, "usage.total", completion.usage().total_tokens());
+        setNonNullProp(r, "finish_reason", choice.finish_reason());
+        setNonNullProp(r, "choice.index", choice.index());
 
         results[i] = new AskResult(ans, r);
       }

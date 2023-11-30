@@ -2,6 +2,7 @@ package graph.chat;
 
 import org.neo4j.graphdb.Label;
 import org.neo4j.graphdb.Node;
+import org.neo4j.graphdb.Relationship;
 import org.neo4j.graphdb.RelationshipType;
 
 public final class Schema {
@@ -16,10 +17,16 @@ public final class Schema {
   static final RelationshipType DECOHERES = RelationshipType.withName("DECOHERES");
   static final RelationshipType SNAPSHOT = RelationshipType.withName("SNAPSHOT");
 
-  public static void setNodeProp(Node n, String p, Object v) {
+  public static void setNonNullProp(Node n, String p, Object v) {
     if (v == null)
       return;
     n.setProperty(p, v);
+  }
+
+  public static void setNonNullProp(Relationship r, String p, Object v) {
+    if (v == null)
+      return;
+    r.setProperty(p, v);
   }
 
 }
