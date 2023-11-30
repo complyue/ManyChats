@@ -1,8 +1,6 @@
 package graph.chat;
 
-import static graph.chat.Chat.DECOHERES;
-import static graph.chat.Chat.Message;
-import static graph.chat.Chat.setNodeProp;
+import static graph.chat.Schema.setNodeProp;
 
 import java.time.Instant;
 import java.time.ZoneOffset;
@@ -25,8 +23,8 @@ import org.neo4j.procedure.Mode;
 import org.neo4j.procedure.Name;
 import org.neo4j.procedure.Procedure;
 
+import graph.chat.Chat.Message;
 import graph.chat.OpenAI.ChatCompletion;
-import graph.chat.OpenAI.Message;
 
 public class AskGPT {
 
@@ -57,9 +55,7 @@ public class AskGPT {
         Map<String, Object> row = histResult.next();
         Path path = (Path) row.get("p");
         for (Node m : path.nodes()) {
-          String role = (String) m.getProperty("role");
-          String content = (String) m.getProperty("content");
-          messages.add(new Message(role, content));
+          messages.add(Message.fromNode(m));
         }
         break;
       }
@@ -75,7 +71,7 @@ public class AskGPT {
       for (int i = 0; i < results.length; i++) {
         final var choice = completion.choices()[i];
 
-        Node ans = tx.createNode(Message);
+        Node ans = tx.createNode(Schema.Message);
 
         ans.setProperty("msgid", MsgID.genUUID());
 
@@ -97,7 +93,7 @@ public class AskGPT {
 
         log.debug("Got answer #" + i + ": " + choice.message().content());
 
-        Relationship r = questMsg.createRelationshipTo(ans, DECOHERES);
+        Relationship r = questMsg.createRelationshipTo(ans, Schema.DECOHERES);
 
         results[i] = new AskResult(ans, r);
       }

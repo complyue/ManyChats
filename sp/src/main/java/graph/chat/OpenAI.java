@@ -7,9 +7,9 @@ import java.util.concurrent.TimeUnit;
 
 import org.neo4j.logging.Log;
 
-import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
+import graph.chat.Chat.Message;
 import okhttp3.MediaType;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
@@ -22,27 +22,6 @@ public class OpenAI {
 
   public static final String OPENAI_API_KEY = System.getenv("OPENAI_API_KEY");
   public static final MediaType JSON_MIME = MediaType.parse("application/json");
-
-  @JsonInclude(JsonInclude.Include.NON_NULL)
-  public static record Message(
-      String role, String content,
-      ToolCall[] tool_calls, String tool_call_id) {
-
-    public Message(String role, String content) {
-      this(role, content, null, null);
-    }
-
-    public static Message toolResult(String content, String tool_call_id) {
-      return new Message("tool", content, null, tool_call_id);
-    }
-  }
-
-  public static record ToolCall(String id, String type,
-      FuncCall function) {
-  }
-
-  public static record FuncCall(String name, String arguments) {
-  }
 
   public static record Choice(String finish_reason, int index, Message message) {
   }
