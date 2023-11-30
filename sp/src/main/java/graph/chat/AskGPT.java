@@ -56,14 +56,14 @@ public class AskGPT {
       while (histResult.hasNext()) {
         Map<String, Object> row = histResult.next();
         Path path = (Path) row.get("p");
-        for (Node m : path.reverseNodes()) {
+        for (Node m : path.nodes()) {
           String role = (String) m.getProperty("role");
           String content = (String) m.getProperty("content");
           messages.add(new Message(role, content));
         }
         break;
       }
-      assert messages.size() >= 1 : "At least a system prompt message should precede the selected quest message";
+      assert messages.size() >= 1 : "at least self msg node should be there, bug?!";
 
       ChatCompletion completion = OpenAI.completeChat(model, messages, log);
       if (completion == null || completion.choices() == null)
