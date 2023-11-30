@@ -395,7 +395,7 @@
         {
           "inTooltip": false,
           "isCaption": false,
-          "key": "Topic",
+          "key": "Conversation",
           "styles": [],
           "type": "label"
         },
@@ -403,7 +403,7 @@
           "inTooltip": false,
           "isCaption": true,
           "isGdsData": false,
-          "key": "summary",
+          "key": "msgid",
           "styles": [],
           "type": "property"
         },
@@ -411,7 +411,86 @@
           "inTooltip": true,
           "isCaption": false,
           "isGdsData": false,
+          "key": "timestamp",
+          "styles": [],
+          "type": "property"
+        },
+        {
+          "inTooltip": false,
+          "isCaption": false,
+          "isGdsData": false,
+          "key": "cypher",
+          "styles": [],
+          "type": "property"
+        },
+        {
+          "inTooltip": false,
+          "isCaption": false,
+          "isGdsData": false,
+          "key": "json",
+          "styles": [],
+          "type": "property"
+        }
+      ],
+      "color": "#F16667",
+      "createdAt": 1701350819713,
+      "icon": "no-icon",
+      "id": 4,
+      "labels": [
+        "Conversation"
+      ],
+      "lastEditedAt": 1701355325151,
+      "name": "Conversation",
+      "properties": [
+        {
+          "dataType": "string",
+          "exclude": false,
+          "name": "json"
+        },
+        {
+          "dataType": "string",
+          "exclude": false,
+          "name": "cypher"
+        },
+        {
+          "dataType": "string",
+          "exclude": false,
+          "name": "msgid"
+        },
+        {
+          "dataType": "DateTime",
+          "exclude": false,
+          "name": "timestamp"
+        }
+      ],
+      "size": 2,
+      "styleRules": [],
+      "textAlign": "top",
+      "textSize": 1
+    },
+    {
+      "captionKeys": [],
+      "captions": [
+        {
+          "inTooltip": false,
+          "isCaption": false,
+          "key": "Topic",
+          "styles": [],
+          "type": "label"
+        },
+        {
+          "inTooltip": true,
+          "isCaption": true,
+          "isGdsData": false,
           "key": "description",
+          "styles": [],
+          "type": "property"
+        },
+        {
+          "inTooltip": false,
+          "isCaption": false,
+          "isGdsData": false,
+          "key": "summary",
           "styles": [],
           "type": "property"
         }
@@ -423,7 +502,7 @@
       "labels": [
         "Topic"
       ],
-      "lastEditedAt": 1701251085793,
+      "lastEditedAt": 1701355275377,
       "name": "Topic",
       "properties": [
         {
@@ -454,17 +533,17 @@
         },
         {
           "inTooltip": false,
-          "isCaption": true,
+          "isCaption": false,
           "isGdsData": false,
-          "key": "name",
+          "key": "description",
           "styles": [],
           "type": "property"
         },
         {
           "inTooltip": true,
-          "isCaption": false,
+          "isCaption": true,
           "isGdsData": false,
-          "key": "description",
+          "key": "name",
           "styles": [],
           "type": "property"
         }
@@ -476,7 +555,7 @@
       "labels": [
         "Tag"
       ],
-      "lastEditedAt": 1701251257261,
+      "lastEditedAt": 1701355275403,
       "name": "Tag",
       "properties": [
         {
@@ -496,13 +575,35 @@
       "textSize": 1
     }
   ],
-  "createdAt": 1701250896402,
+  "createdAt": 1701270622659,
   "hiddenCategories": [],
   "hiddenRelationshipTypes": [],
   "hideUncategorisedData": false,
-  "id": "7d0b1f20-8e9b-11ee-8d8b-070cc08f3878",
+  "id": "6acf1130-8ec9-11ee-b834-3358bed118c0",
   "isAuto": true,
   "labels": {
+    "Conversation": [
+      {
+        "dataType": "string",
+        "propertyKey": "cypher",
+        "type": "Conversation"
+      },
+      {
+        "dataType": "string",
+        "propertyKey": "msgid",
+        "type": "Conversation"
+      },
+      {
+        "dataType": "string",
+        "propertyKey": "json",
+        "type": "Conversation"
+      },
+      {
+        "dataType": "DateTime",
+        "propertyKey": "timestamp",
+        "type": "Conversation"
+      }
+    ],
     "Message": [
       {
         "dataType": "string",
@@ -545,7 +646,7 @@
       }
     ]
   },
-  "lastEditedAt": 1701250896402,
+  "lastEditedAt": 1701270622659,
   "metadata": {
     "indexes": [
       {
@@ -591,7 +692,34 @@
         "label": "Tag",
         "propertyKeys": [
           {
+            "key": "description",
+            "metadataProp": true
+          },
+          {
             "key": "name",
+            "metadataProp": true
+          }
+        ],
+        "type": "native"
+      },
+      {
+        "isMetadataPropIndex": true,
+        "label": "Conversation",
+        "propertyKeys": [
+          {
+            "key": "cypher",
+            "metadataProp": true
+          },
+          {
+            "key": "msgid",
+            "metadataProp": true
+          },
+          {
+            "key": "json",
+            "metadataProp": true
+          },
+          {
+            "key": "timestamp",
             "metadataProp": true
           }
         ],
@@ -603,6 +731,11 @@
         "relationshipType": "DECOHERES",
         "source": "Message",
         "target": "Message"
+      },
+      {
+        "relationshipType": "SNAPSHOT",
+        "source": "Message",
+        "target": "Conversation"
       },
       {
         "relationshipType": "INITIATES",
@@ -618,9 +751,10 @@
     "stats": {
       "labels": {},
       "relationshipTypes": {
-        "DECOHERES": 1,
+        "DECOHERES": 2,
         "HAS_TAG": 1,
-        "INITIATES": 1
+        "INITIATES": 1,
+        "SNAPSHOT": 1
       }
     }
   },
@@ -642,9 +776,9 @@
       "#848484",
       "#D9D9D9"
     ],
-    "currentIndex": 4
+    "currentIndex": 5
   },
-  "parentPerspectiveId": "05277000-89e9-11ee-983f-4b8420611417",
+  "parentPerspectiveId": "7d0b1f20-8e9b-11ee-8d8b-070cc08f3878",
   "relationshipTypes": [
     {
       "captionKeys": [],
@@ -705,6 +839,32 @@
       "styleRules": [],
       "textAlign": "top",
       "textSize": 1
+    },
+    {
+      "captionKeys": [],
+      "captions": [
+        {
+          "inTooltip": true,
+          "isCaption": true,
+          "key": "SNAPSHOT",
+          "styles": [],
+          "type": "relationship"
+        }
+      ],
+      "color": "#848484",
+      "id": "SNAPSHOT",
+      "name": "SNAPSHOT",
+      "properties": [
+        {
+          "dataType": "DateTime",
+          "propertyKey": "timestamp",
+          "type": "SNAPSHOT"
+        }
+      ],
+      "size": 1,
+      "styleRules": [],
+      "textAlign": "top",
+      "textSize": 1
     }
   ],
   "sceneActions": [
@@ -718,36 +878,6 @@
       "id": "80719d70-8d00-11ee-80f3-e9a24a5b2848",
       "isUpdateQuery": true,
       "name": "Quest GPT",
-      "relationshipTypes": null
-    },
-    {
-      "categories": null,
-      "createdAt": 1700755255620,
-      "cypher": "MATCH (q:Message) WHERE id(q) in $nodes\n\nMATCH p = (h:Message)-[:DECOHERES*]->(q:Message)\nWHERE NOT (:Message)-[:DECOHERES]->(h)\n\nOPTIONAL MATCH tp = (t:Topic)-[:INITIATES]->(h)\nOPTIONAL MATCH tgp = (t)-[:HAS_TAG]->(tg:Tag)\n\nRETURN p, tp, tgp\n",
-      "hasCypherErrors": false,
-      "id": "7c1db040-8a19-11ee-a9d6-d9070732b86e",
-      "isUpdateQuery": false,
-      "name": "Show full conversation",
-      "relationshipTypes": null
-    },
-    {
-      "categories": null,
-      "createdAt": 1700752286066,
-      "cypher": "MATCH (q:Message {role: 'user'}) WHERE id(q) in $nodes\n\nCREATE (a:Message {msgid: chat.msgid(), role: 'assistant', content: 'The answer to your question is ...'})\nCREATE  (q)-[r:DECOHERES]->(a)\n\nRETURN a, r\n",
-      "hasCypherErrors": false,
-      "id": "921fb520-8a12-11ee-81f2-916d7027505b",
-      "isUpdateQuery": true,
-      "name": "Fake Answer",
-      "relationshipTypes": null
-    },
-    {
-      "categories": null,
-      "createdAt": 1700752593636,
-      "cypher": "MATCH (q1:Message {role: 'user'}) WHERE id(q1) in $nodes\n\nCREATE (q2:Message {msgid: chat.msgid(), role: 'user', content: 'Also I want to know ...'})\nCREATE p = (q1)-[:DECOHERES]->(q2)\n\nRETURN p\n",
-      "hasCypherErrors": false,
-      "id": "49732a40-8a13-11ee-81f2-916d7027505b",
-      "isUpdateQuery": true,
-      "name": "More Quest",
       "relationshipTypes": null
     },
     {
@@ -771,6 +901,56 @@
       "isUpdateQuery": true,
       "name": "Initiate conversation",
       "relationshipTypes": null
+    },
+    {
+      "categories": null,
+      "createdAt": 1701350316269,
+      "cypher": "MATCH (m:Message) WHERE id(m) in $nodes\n\nCALL chat.snapshots(m, 10) YIELD cnvs, r\n\nRETURN cnvs, r\n",
+      "hasCypherErrors": false,
+      "id": "f7e6c2c0-8f82-11ee-9472-5116bdec4c62",
+      "isUpdateQuery": false,
+      "name": "Show conversation snapshots",
+      "relationshipTypes": null
+    },
+    {
+      "categories": null,
+      "createdAt": 1700755255620,
+      "cypher": "MATCH (m:Message) WHERE id(m) in $nodes\n\nMATCH p = (h:Message)-[:DECOHERES*]->(m:Message)\nWHERE NOT (:Message)-[:DECOHERES]->(h)\n\nOPTIONAL MATCH tp = (t:Topic)-[:INITIATES]->(h)\nOPTIONAL MATCH tgp = (t)-[:HAS_TAG]->(tg:Tag)\n\nRETURN p, tp, tgp\n",
+      "hasCypherErrors": false,
+      "id": "7c1db040-8a19-11ee-a9d6-d9070732b86e",
+      "isUpdateQuery": false,
+      "name": "Show conversation graph",
+      "relationshipTypes": null
+    },
+    {
+      "categories": null,
+      "createdAt": 1701350007769,
+      "cypher": "MATCH (m:Message) WHERE id(m) in $nodes\n\nCALL chat.snapshot(m) YIELD cnvs, r\n\n// Every time you visit the definition of this scene action,\n// mind to check the \"Write transaction\" box above, or this scene action will silently fail any update to db.\n// If no that checkbox there, you need to enable experimental features of Bloom: \"Allow write transactions\".\n// If unable to do above, just leave the line below uncommented\nMERGE (m)-[r1:SNAPSHOT]->(cnvs)\n\nRETURN cnvs, r\n",
+      "hasCypherErrors": false,
+      "id": "40053e70-8f82-11ee-9472-5116bdec4c62",
+      "isUpdateQuery": true,
+      "name": "New conversation snapshot",
+      "relationshipTypes": null
+    },
+    {
+      "categories": null,
+      "createdAt": 1700752593636,
+      "cypher": "MATCH (q1:Message {role: 'user'}) WHERE id(q1) in $nodes\n\nCREATE (q2:Message {msgid: chat.msgid(), role: 'user', content: 'Also I want to know ...'})\nCREATE p = (q1)-[:DECOHERES]->(q2)\n\nRETURN p\n",
+      "hasCypherErrors": false,
+      "id": "49732a40-8a13-11ee-81f2-916d7027505b",
+      "isUpdateQuery": true,
+      "name": "More Quest",
+      "relationshipTypes": null
+    },
+    {
+      "categories": null,
+      "createdAt": 1700752286066,
+      "cypher": "MATCH (q:Message {role: 'user'}) WHERE id(q) in $nodes\n\nCREATE (a:Message {msgid: chat.msgid(), role: 'assistant', content: 'The answer to your question is ...'})\nCREATE  (q)-[r:DECOHERES]->(a)\n\nRETURN a, r\n",
+      "hasCypherErrors": false,
+      "id": "921fb520-8a12-11ee-81f2-916d7027505b",
+      "isUpdateQuery": true,
+      "name": "Fake Answer",
+      "relationshipTypes": null
     }
   ],
   "templates": [
@@ -790,9 +970,9 @@
       "hasCypherErrors": false,
       "id": "tmpl:1700754621840",
       "isUpdateQuery": false,
-      "name": "Show all conversations",
+      "name": "Show tip message of all conversations",
       "params": [],
-      "text": "Show conversations"
+      "text": "Show tips"
     },
     {
       "createdAt": 1700754358560,
