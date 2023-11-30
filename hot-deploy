@@ -2,4 +2,4 @@
 
 cd $(dirname "$0")
 
-./gradlew shadow && cp sp/build/libs/*.jar "$NEO4J_HOME/plugins/" && "$NEO4J_HOME/bin/neo4j" restart
+./gradlew shadow && cp sp/build/libs/*-neo4j-sp.jar "$NEO4J_HOME/plugins/" && "$NEO4J_HOME/bin/neo4j" restart
