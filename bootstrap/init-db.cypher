@@ -14,24 +14,18 @@ The randomness of ChatGPT, as well as human minds, behaves quite like quantum me
 With a graph database (i.e. neo4j as we are using), we can store more than 1 possibilities of those chats, though in the single classical-mechanical world we perceive.
 
 Actually we can store as many as the capacity of underlying storage (disks as for today) allows. Let's pretend we are god seeing multiverse of chats, and mine usefulness out it.
-") })
-MERGE (brainstorm:Tag { name: 'brainstorm', description: 'Novel ideas born from storms in the mind' })
-MERGE (topic0)-[:HAS_TAG]->(brainstorm)
+") })-[:HAS_TAG]->(:Tag { name: 'brainstorm', description: 'Novel ideas born from storms in the mind' })
 
-MERGE (prompt0:Message {role: 'system'})
-ON CREATE SET prompt0.msgid = chat.msgid(), prompt0.content = trim("
+MERGE (topic0)-[:INITIATES]->(prompt0:Message { msgid: chat.msgid(), role: 'system', content: trim("
 You are an expert in graph database (Neo4j). You will help the user work on db design & operating, by translating user's description into Cypher queries, as well as optimizing/revising queries from the user, to make them more performant & appropriate.
-")
-MERGE (topic0)-[:INITIATES]->(prompt0)
+") })
 
-MERGE (quest0:Message {role: 'user'})
-ON CREATE SET quest0.msgid = chat.msgid(), quest0.content = trim("
+MERGE (prompt0)-[:DECOHERES]->(quest0:Message { msgid: chat.msgid(), role: 'user', content: trim("
 We have a graph of chat messages, a `(:Message)` `[:DECOHERES]` into many possible next `(:Message)`s, branching the graph toward different directions.
 
 'Many Chats' is like the 'Many Worlds' interpretation of quantum mechanism.
 
 How can I show my db schema to you, so you can give advices?
-")
-MERGE (prompt0)-[:DECOHERES]->(quest0)
+") })
 
 ;
