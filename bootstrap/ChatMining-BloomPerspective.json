@@ -42,7 +42,7 @@
       "labels": [
         "Message"
       ],
-      "lastEditedAt": 1701251096277,
+      "lastEditedAt": 1701678917576,
       "name": "Message",
       "properties": [
         {
@@ -59,6 +59,11 @@
           "dataType": "string",
           "exclude": false,
           "name": "msgid"
+        },
+        {
+          "dataType": "DateTime",
+          "exclude": false,
+          "name": "timestamp"
         }
       ],
       "size": 1,
@@ -692,7 +697,43 @@
       "color": "#848484",
       "id": "DECOHERES",
       "name": "DECOHERES",
-      "properties": [],
+      "properties": [
+        {
+          "dataType": "bigint",
+          "propertyKey": "usage.completion",
+          "type": "DECOHERES"
+        },
+        {
+          "dataType": "bigint",
+          "propertyKey": "usage.total",
+          "type": "DECOHERES"
+        },
+        {
+          "dataType": "string",
+          "propertyKey": "finish_reason",
+          "type": "DECOHERES"
+        },
+        {
+          "dataType": "DateTime",
+          "propertyKey": "created",
+          "type": "DECOHERES"
+        },
+        {
+          "dataType": "bigint",
+          "propertyKey": "usage.prompt",
+          "type": "DECOHERES"
+        },
+        {
+          "dataType": "string",
+          "propertyKey": "model",
+          "type": "DECOHERES"
+        },
+        {
+          "dataType": "bigint",
+          "propertyKey": "choice.index",
+          "type": "DECOHERES"
+        }
+      ],
       "size": 1,
       "styleRules": [],
       "textAlign": "top",
@@ -814,13 +855,23 @@
   "templates": [
     {
       "createdAt": 1700754621840,
-      "cypher": "MATCH (m:Message)\nWHERE NOT (m)-[:DECOHERES]->(:Message)\nRETURN m\n",
+      "cypher": "MATCH (m:Message)\nWHERE NOT (m)-[:DECOHERES]->(:Message)\nRETURN m\nORDER BY m.timestamp DESC\nLIMIT $number\n",
       "hasCypherErrors": false,
       "id": "tmpl:1700754621840",
       "isUpdateQuery": false,
-      "name": "Show tip message of all conversations",
-      "params": [],
-      "text": "Show tip of conversations"
+      "name": "Show messages recently made at tip of conversations",
+      "params": [
+        {
+          "collapsed": false,
+          "cypher": "UNWIND [10, 200, 500] AS n\nRETURN n\n",
+          "dataType": "Integer",
+          "name": "$number",
+          "suggestionBoolean": false,
+          "suggestionLabel": null,
+          "suggestionProp": null
+        }
+      ],
+      "text": "Show recent $number conversation tips"
     },
     {
       "createdAt": 1700754358560,
