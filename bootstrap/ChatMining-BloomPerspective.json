@@ -33,62 +33,6 @@
           "key": "content",
           "styles": [],
           "type": "property"
-        },
-        {
-          "inTooltip": false,
-          "isCaption": false,
-          "isGdsData": false,
-          "key": "choice.index",
-          "styles": [],
-          "type": "property"
-        },
-        {
-          "inTooltip": false,
-          "isCaption": false,
-          "isGdsData": false,
-          "key": "created",
-          "styles": [],
-          "type": "property"
-        },
-        {
-          "inTooltip": false,
-          "isCaption": false,
-          "isGdsData": false,
-          "key": "finish_reason",
-          "styles": [],
-          "type": "property"
-        },
-        {
-          "inTooltip": false,
-          "isCaption": false,
-          "isGdsData": false,
-          "key": "model",
-          "styles": [],
-          "type": "property"
-        },
-        {
-          "inTooltip": false,
-          "isCaption": false,
-          "isGdsData": false,
-          "key": "usage.completion",
-          "styles": [],
-          "type": "property"
-        },
-        {
-          "inTooltip": false,
-          "isCaption": false,
-          "isGdsData": false,
-          "key": "usage.prompt",
-          "styles": [],
-          "type": "property"
-        },
-        {
-          "inTooltip": false,
-          "isCaption": false,
-          "isGdsData": false,
-          "key": "usage.total",
-          "styles": [],
-          "type": "property"
         }
       ],
       "color": "#000000",
@@ -110,41 +54,6 @@
           "dataType": "string",
           "exclude": false,
           "name": "role"
-        },
-        {
-          "dataType": "bigint",
-          "exclude": false,
-          "name": "usage.completion"
-        },
-        {
-          "dataType": "bigint",
-          "exclude": false,
-          "name": "usage.total"
-        },
-        {
-          "dataType": "string",
-          "exclude": false,
-          "name": "finish_reason"
-        },
-        {
-          "dataType": "DateTime",
-          "exclude": false,
-          "name": "created"
-        },
-        {
-          "dataType": "bigint",
-          "exclude": false,
-          "name": "usage.prompt"
-        },
-        {
-          "dataType": "string",
-          "exclude": false,
-          "name": "model"
-        },
-        {
-          "dataType": "bigint",
-          "exclude": false,
-          "name": "choice.index"
         },
         {
           "dataType": "string",
@@ -281,14 +190,6 @@
               "inTooltip": false,
               "isCaption": false,
               "isGdsData": false,
-              "key": "choice.index",
-              "styles": [],
-              "type": "property"
-            },
-            {
-              "inTooltip": false,
-              "isCaption": false,
-              "isGdsData": false,
               "key": "content",
               "styles": [],
               "type": "property"
@@ -297,55 +198,7 @@
               "inTooltip": false,
               "isCaption": false,
               "isGdsData": false,
-              "key": "created",
-              "styles": [],
-              "type": "property"
-            },
-            {
-              "inTooltip": false,
-              "isCaption": false,
-              "isGdsData": false,
-              "key": "finish_reason",
-              "styles": [],
-              "type": "property"
-            },
-            {
-              "inTooltip": false,
-              "isCaption": false,
-              "isGdsData": false,
-              "key": "model",
-              "styles": [],
-              "type": "property"
-            },
-            {
-              "inTooltip": false,
-              "isCaption": false,
-              "isGdsData": false,
               "key": "role",
-              "styles": [],
-              "type": "property"
-            },
-            {
-              "inTooltip": false,
-              "isCaption": false,
-              "isGdsData": false,
-              "key": "usage.completion",
-              "styles": [],
-              "type": "property"
-            },
-            {
-              "inTooltip": false,
-              "isCaption": false,
-              "isGdsData": false,
-              "key": "usage.prompt",
-              "styles": [],
-              "type": "property"
-            },
-            {
-              "inTooltip": false,
-              "isCaption": false,
-              "isGdsData": false,
-              "key": "usage.total",
               "styles": [],
               "type": "property"
             }
@@ -575,7 +428,7 @@
       "textSize": 1
     }
   ],
-  "createdAt": 1701361021419,
+  "createdAt": 1701678664730,
   "hiddenCategories": [],
   "hiddenRelationshipTypes": [],
   "hideUncategorisedData": false,
@@ -608,6 +461,11 @@
       {
         "dataType": "string",
         "propertyKey": "role",
+        "type": "Message"
+      },
+      {
+        "dataType": "DateTime",
+        "propertyKey": "timestamp",
         "type": "Message"
       },
       {
@@ -646,7 +504,7 @@
       }
     ]
   },
-  "lastEditedAt": 1701361021419,
+  "lastEditedAt": 1701678664730,
   "metadata": {
     "indexes": [
       {
@@ -751,7 +609,7 @@
     "stats": {
       "labels": {},
       "relationshipTypes": {
-        "DECOHERES": 4,
+        "DECOHERES": 2,
         "HAS_TAG": 1,
         "INITIATES": 1,
         "SNAPSHOT": 1
@@ -883,7 +741,7 @@
     {
       "categories": null,
       "createdAt": 1700751695990,
-      "cypher": "MATCH (c:Message) WHERE id(c) in $nodes\nAND c.role IN ['system', 'assistant'] \n\nCREATE (q:Message {msgid: chat.msgid(), role: 'user', content: 'Please tell me ...'})\nCREATE p = (c)-[:DECOHERES]->(q)\n\nRETURN p\n",
+      "cypher": "MATCH (c:Message) WHERE id(c) in $nodes\nAND c.role IN ['system', 'assistant'] \n\nCREATE (q:Message {\n  msgid: chat.msgid(), timestamp: datetime({epochMillis: timestamp()}),\n  role: 'user', content: 'Please tell me ...'\n})\nCREATE p = (c)-[:DECOHERES]->(q)\n\nRETURN p\n",
       "hasCypherErrors": false,
       "id": "32694160-8a11-11ee-81f2-916d7027505b",
       "isUpdateQuery": true,
@@ -895,7 +753,7 @@
         1
       ],
       "createdAt": 1700736539737,
-      "cypher": "MATCH (t:Topic) WHERE id(t) in $nodes\n\nCREATE (m:Message {msgid: chat.msgid(), role: 'system', content: 'You as the assistant should ...'})\nCREATE p = (t)-[:INITIATES]->(m)\n\nRETURN p\n",
+      "cypher": "MATCH (t:Topic) WHERE id(t) in $nodes\n\nCREATE (m:Message {\n  msgid: chat.msgid(), timestamp: datetime({epochMillis: timestamp()}),\n  role: 'system', content: 'You as the assistant should ...'}\n)\nCREATE p = (t)-[:INITIATES]->(m)\n\nRETURN p\n",
       "hasCypherErrors": false,
       "id": "e8946d80-89ed-11ee-8252-81adda452279",
       "isUpdateQuery": true,
@@ -935,7 +793,7 @@
     {
       "categories": null,
       "createdAt": 1700752593636,
-      "cypher": "MATCH (q1:Message {role: 'user'}) WHERE id(q1) in $nodes\n\nCREATE (q2:Message {msgid: chat.msgid(), role: 'user', content: 'Also I want to know ...'})\nCREATE p = (q1)-[:DECOHERES]->(q2)\n\nRETURN p\n",
+      "cypher": "MATCH (q1:Message {role: 'user'}) WHERE id(q1) in $nodes\n\nCREATE (q2:Message {\n  msgid: chat.msgid(), timestamp: datetime({epochMillis: timestamp()}),\n  role: 'user', content: 'Also I want to know ...'\n})\nCREATE p = (q1)-[:DECOHERES]->(q2)\n\nRETURN p\n",
       "hasCypherErrors": false,
       "id": "49732a40-8a13-11ee-81f2-916d7027505b",
       "isUpdateQuery": true,
@@ -945,7 +803,7 @@
     {
       "categories": null,
       "createdAt": 1700752286066,
-      "cypher": "MATCH (q:Message {role: 'user'}) WHERE id(q) in $nodes\n\nCREATE (a:Message {msgid: chat.msgid(), role: 'assistant', content: 'The answer to your question is ...'})\nCREATE  (q)-[r:DECOHERES]->(a)\n\nRETURN a, r\n",
+      "cypher": "MATCH (q:Message {role: 'user'}) WHERE id(q) in $nodes\n\nCREATE (a:Message {\n  msgid: chat.msgid(), timestamp: datetime({epochMillis: timestamp()}),\n  role: 'assistant', content: 'The answer to your question is ...'\n})\nCREATE  (q)-[r:DECOHERES]->(a)\n\nRETURN a, r\n",
       "hasCypherErrors": false,
       "id": "921fb520-8a12-11ee-81f2-916d7027505b",
       "isUpdateQuery": true,
@@ -955,16 +813,6 @@
   ],
   "templates": [
     {
-      "createdAt": 1700755437845,
-      "cypher": "CREATE (t:Topic {\n  summary: 'SomeBrilliantIdea',\n  description: 'Some Brilliant Idea'\n})\nRETURN t\n",
-      "hasCypherErrors": false,
-      "id": "tmpl:1700755437845",
-      "isUpdateQuery": true,
-      "name": "Create a new topic",
-      "params": [],
-      "text": "Create Topic"
-    },
-    {
       "createdAt": 1700754621840,
       "cypher": "MATCH (m:Message)\nWHERE NOT (m)-[:DECOHERES]->(:Message)\nRETURN m\n",
       "hasCypherErrors": false,
@@ -972,7 +820,7 @@
       "isUpdateQuery": false,
       "name": "Show tip message of all conversations",
       "params": [],
-      "text": "Show tips"
+      "text": "Show tip of conversations"
     },
     {
       "createdAt": 1700754358560,
@@ -983,6 +831,16 @@
       "name": "Show all topics",
       "params": [],
       "text": "Show topics"
+    },
+    {
+      "createdAt": 1700755437845,
+      "cypher": "CREATE (t:Topic {\n  summary: 'SomeBrilliantIdea',\n  description: 'Some Brilliant Idea'\n})\nRETURN t\n",
+      "hasCypherErrors": false,
+      "id": "tmpl:1700755437845",
+      "isUpdateQuery": true,
+      "name": "Create a new topic",
+      "params": [],
+      "text": "Create Topic"
     },
     {
       "createdAt": 1700746851868,

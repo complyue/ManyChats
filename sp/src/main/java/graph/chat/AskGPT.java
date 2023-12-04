@@ -75,10 +75,11 @@ public class AskGPT {
 
         Node ans = tx.createNode(Schema.Message);
         ans.setProperty("msgid", MsgID.genUUID());
+        ans.setProperty("timestamp", ZonedDateTime.now(ZoneOffset.UTC));
         choice.message().updateToNode(ans);
 
         Relationship r = questMsg.createRelationshipTo(ans, Schema.DECOHERES);
-        setNonNullProp(r, "created", // cypher: datetime({epochSeconds: created})
+        setNonNullProp(r, "created",
             ZonedDateTime.ofInstant(Instant.ofEpochSecond(completion.created()), ZoneOffset.UTC));
         setNonNullProp(r, "model", completion.model());
         setNonNullProp(r, "system_fingerprint", completion.system_fingerprint());

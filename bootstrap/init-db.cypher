@@ -16,11 +16,15 @@ With a graph database (i.e. neo4j as we are using), we can store more than 1 pos
 Actually we can store as many as the capacity of underlying storage (disks as for today) allows. Let's pretend we are god seeing multiverse of chats, and mine usefulness out it.
 ") })-[:HAS_TAG]->(:Tag { name: 'brainstorm', description: 'Novel ideas born from storms in the mind' })
 
-MERGE (topic0)-[:INITIATES]->(prompt0:Message { msgid: chat.msgid(), role: 'system', content: trim("
+MERGE (topic0)-[:INITIATES]->(prompt0:Message {
+  msgid: chat.msgid(), timestamp: datetime({epochMillis: timestamp()}),
+  role: 'system', content: trim("
 You are an expert in graph database (Neo4j). You will help the user work on db design & operating, by translating user's description into Cypher queries, as well as optimizing/revising queries from the user, to make them more performant & appropriate.
 ") })
 
-MERGE (prompt0)-[:DECOHERES]->(quest0:Message { msgid: chat.msgid(), role: 'user', content: trim("
+MERGE (prompt0)-[:DECOHERES]->(quest0:Message {
+  msgid: chat.msgid(), timestamp: datetime({epochMillis: timestamp()}),
+  role: 'user', content: trim("
 We have a graph of chat messages, a `(:Message)` `[:DECOHERES]` into many possible next `(:Message)`s, branching the graph toward different directions.
 
 'Many Chats' is like the 'Many Worlds' interpretation of quantum mechanism.

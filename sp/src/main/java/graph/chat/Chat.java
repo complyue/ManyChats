@@ -85,7 +85,9 @@ public class Chat {
           cypherWriter.write("MERGE (m" + msgNo);
           cypherWriter.write(":Message {msgid: ");
           jsonMapper.writeValue(cypherWriter, (String) m.getProperty("msgid"));
-          cypherWriter.write("}) SET m" + msgNo + ".role=");
+          cypherWriter.write("}) SET m" + msgNo + ".timestamp=datetime(");
+          jsonMapper.writeValue(cypherWriter, m.getProperty("timestamp").toString());
+          cypherWriter.write("), m" + msgNo + ".role=");
           jsonMapper.writeValue(cypherWriter, msg.role);
           if (msg.content != null) {
             cypherWriter.write(", m" + msgNo + ".content=");
