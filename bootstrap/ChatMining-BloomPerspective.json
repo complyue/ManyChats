@@ -11,6 +11,14 @@
           "type": "label"
         },
         {
+          "inTooltip": true,
+          "isCaption": false,
+          "isGdsData": false,
+          "key": "timestamp",
+          "styles": [],
+          "type": "property"
+        },
+        {
           "inTooltip": false,
           "isCaption": true,
           "isGdsData": false,
@@ -442,8 +450,8 @@
   "labels": {
     "Conversation": [
       {
-        "dataType": "string",
-        "propertyKey": "cypher",
+        "dataType": "DateTime",
+        "propertyKey": "timestamp",
         "type": "Conversation"
       },
       {
@@ -457,8 +465,8 @@
         "type": "Conversation"
       },
       {
-        "dataType": "DateTime",
-        "propertyKey": "timestamp",
+        "dataType": "string",
+        "propertyKey": "cypher",
         "type": "Conversation"
       }
     ],
@@ -524,6 +532,10 @@
             "metadataProp": true
           },
           {
+            "key": "timestamp",
+            "metadataProp": true
+          },
+          {
             "key": "content",
             "metadataProp": true
           }
@@ -570,7 +582,7 @@
         "label": "Conversation",
         "propertyKeys": [
           {
-            "key": "cypher",
+            "key": "timestamp",
             "metadataProp": true
           },
           {
@@ -582,7 +594,7 @@
             "metadataProp": true
           },
           {
-            "key": "timestamp",
+            "key": "cypher",
             "metadataProp": true
           }
         ],
@@ -753,13 +765,7 @@
       "color": "#848484",
       "id": "SNAPSHOT",
       "name": "SNAPSHOT",
-      "properties": [
-        {
-          "dataType": "DateTime",
-          "propertyKey": "timestamp",
-          "type": "SNAPSHOT"
-        }
-      ],
+      "properties": [],
       "size": 1,
       "styleRules": [],
       "textAlign": "top",
@@ -802,7 +808,9 @@
       "relationshipTypes": null
     },
     {
-      "categories": null,
+      "categories": [
+        3
+      ],
       "createdAt": 1701350316269,
       "cypher": "MATCH (m:Message) WHERE id(m) in $nodes\n\nCALL chat.snapshots(m, 10) YIELD cnvs, r\n\nRETURN cnvs, r\n",
       "hasCypherErrors": false,
@@ -822,13 +830,15 @@
       "relationshipTypes": null
     },
     {
-      "categories": null,
+      "categories": [
+        3
+      ],
       "createdAt": 1701350007769,
       "cypher": "MATCH (m:Message) WHERE id(m) in $nodes\n\nCALL chat.snapshot(m) YIELD cnvs, r\n\n// Every time you visit the definition of this scene action,\n// mind to check the \"Write transaction\" box above, or this scene action will silently fail any update to db.\n// If no that checkbox there, you need to enable experimental features of Bloom: \"Allow write transactions\".\n// If unable to do above, just leave the line below uncommented\nMERGE (m)-[r1:SNAPSHOT]->(cnvs)\n\nRETURN cnvs, r\n",
       "hasCypherErrors": false,
       "id": "40053e70-8f82-11ee-9472-5116bdec4c62",
       "isUpdateQuery": true,
-      "name": "New conversation snapshot",
+      "name": "Snapshot conversation",
       "relationshipTypes": null
     },
     {
