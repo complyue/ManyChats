@@ -155,17 +155,22 @@ public class Chat {
       }
       assert messages.size() >= 1 : "At least a system prompt message should precede the selected quest message";
 
-      final var ts = ZonedDateTime.now(ZoneOffset.UTC);
-
-      final Node cnvs = tx.createNode(Schema.Conversation);
-
-      cnvs.setProperty("msgid", tipMsg.getProperty("msgid"));
-      cnvs.setProperty("timestamp", ts);
-      cnvs.setProperty("json", jsonMapper.writeValueAsString(messages));
-      cnvs.setProperty("cypher", cypherWriter.toString());
-
-      Relationship r = tipMsg.createRelationshipTo(cnvs, Schema.SNAPSHOT);
-      r.setProperty("timestamp", ts);
+      final Result ssResult = tx.execute(
+          "MATCH (m:Message) WHERE elementId(m) = $msgEID"
+              + " MERGE (m)-[r:SNAPSHOT]->(cnvs:Conversation{ msgid: $msgid, json: $json })"
+              + " ON CREATE SET "
+              + "   cnvs.timestamp = datetime({epochMillis: timestamp()}),"
+              + "   cnvs.cypher = $cypher"
+              + " RETURN cnvs, r",
+          Map.of(
+              "msgEID", tipMsg.getElementId(),
+              "msgid", tipMsg.getProperty("msgid"),
+              "json", jsonMapper.writeValueAsString(messages),
+              "cypher", cypherWriter.toString()));
+      assert ssResult.hasNext() : "MERGE can fail?!";
+      final var ssRecord = ssResult.next();
+      final var cnvs = (Node) ssRecord.get("cnvs");
+      final var r = (Relationship) ssRecord.get("r");
 
       return Stream.of(new SnapshotResult(cnvs, r));
 

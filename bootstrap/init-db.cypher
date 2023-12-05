@@ -2,6 +2,11 @@ CREATE CONSTRAINT IF NOT EXISTS
   FOR (m:Message) REQUIRE m.msgid IS UNIQUE
 ;
 
+CREATE INDEX IF NOT EXISTS
+  FOR (cnvs:Conversation)
+  ON (cnvs.msgid, cnvs.json)
+;
+
 MERGE (topic0:Topic {
   summary: 'Many Chats',
   description: trim("
