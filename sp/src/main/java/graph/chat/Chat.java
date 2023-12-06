@@ -1,8 +1,10 @@
 package graph.chat;
 
+import java.io.IOException;
 import java.io.StringWriter;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -24,6 +26,8 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 public class Chat {
+
+  public static final ObjectMapper jsonMapper = new ObjectMapper();
 
   @Context
   public Transaction tx;
@@ -54,7 +58,6 @@ public class Chat {
   @Description("Snapshot the full conversation history into a `(:Conversation)` node, for the specified tip msg.")
   public Stream<SnapshotResult> snapshot(@Name("tipMsg") Node tipMsg) {
     try {
-      ObjectMapper jsonMapper = new ObjectMapper();
       final List<Message> messages = new ArrayList<>();
       final StringWriter cypherWriter = new StringWriter();
 
@@ -72,84 +75,31 @@ public class Chat {
               + " WITH p, COLLECT({topic: t, tags: tags}) AS topicsWithTags"
               + " RETURN p, topicsWithTags",
           Map.of("msgEID", tipMsg.getElementId()));
-      while (cnvsResult.hasNext()) {
+      if (cnvsResult.hasNext()) {
         final Map<String, Object> row = cnvsResult.next();
         final Path path = (Path) row.get("p");
-        for (final Node m : path.nodes()) {
-          final Message msg = Message.fromNode(m);
-          messages.add(msg);
-          final int msgNo = messages.size();
-
-          cypherWriter.write("MERGE (m" + msgNo);
-          cypherWriter.write(":Message {msgid: ");
-          jsonMapper.writeValue(cypherWriter, (String) m.getProperty("msgid"));
-          cypherWriter.write("}) SET m" + msgNo + ".timestamp=datetime(");
-          jsonMapper.writeValue(cypherWriter, m.getProperty("timestamp").toString());
-          cypherWriter.write("), m" + msgNo + ".role=");
-          jsonMapper.writeValue(cypherWriter, msg.role);
-          if (msg.content != null) {
-            cypherWriter.write(", m" + msgNo + ".content=");
-            jsonMapper.writeValue(cypherWriter, msg.content);
-          }
-          if (msg.tool_calls != null) {
-            cypherWriter.write(", m" + msgNo + ".tool_calls=[");
-            for (final var tc : msg.tool_calls) {
-              cypherWriter.write("{ id: ");
-              jsonMapper.writeValue(cypherWriter, tc.id);
-              cypherWriter.write(", type: ");
-              jsonMapper.writeValue(cypherWriter, tc.type);
-              cypherWriter.write(", function: { name: ");
-              jsonMapper.writeValue(cypherWriter, tc.function.get("name"));
-              cypherWriter.write(", arguments: ");
-              jsonMapper.writeValue(cypherWriter, tc.function.get("arguments"));
-              cypherWriter.write(" } }");
-            }
-            cypherWriter.write("]");
-          }
-          if (msg.tool_call_id != null) {
-            cypherWriter.write(", m" + msgNo + ".tool_call_id=");
-            jsonMapper.writeValue(cypherWriter, msg.tool_call_id);
-          }
-          cypherWriter.write("\n");
-          if (msgNo > 1) {
-            cypherWriter.write("MERGE (m" + (msgNo - 1));
-            cypherWriter.write(")-[:DECOHERES]->(m" + msgNo);
-            cypherWriter.write(")\n");
-          }
-
-          cypherWriter.write("\n");
-        }
-        assert messages.size() >= 1 : "at least self msg node should be there, bug?!";
-
-        final var topicsWithTags = (List<?>) row.get("topicsWithTags");
-        int topicNo = 1;
-        for (final var entry : topicsWithTags) {
-          final Map<?, ?> tr = (Map<?, ?>) entry;
-          final Node topic = (Node) tr.get("topic");
-
-          cypherWriter.write("MERGE (t" + topicNo);
-          cypherWriter.write(":Topic { summary: ");
-          jsonMapper.writeValue(cypherWriter, (String) topic.getProperty("summary"));
-          cypherWriter.write(", description: ");
-          jsonMapper.writeValue(cypherWriter, (String) topic.getProperty("description"));
-          cypherWriter.write(" })-[:INITIATES]->(m1)\n");
-
-          final List<?> tags = (List<?>) tr.get("tags");
-          for (final var t : tags) {
-            final Node tag = (Node) t;
-            cypherWriter.write("MERGE (t" + topicNo);
-            cypherWriter.write(")-[:HAS_TAG]->(:Tag { name: ");
-            jsonMapper.writeValue(cypherWriter, (String) tag.getProperty("name"));
-            cypherWriter.write(", description: ");
-            jsonMapper.writeValue(cypherWriter, (String) tag.getProperty("description"));
-            cypherWriter.write(" })\n");
-          }
-
-          topicNo++;
-          cypherWriter.write("\n");
-        }
-
-        break;
+        prepareSnapshot(path.nodes(), (List<?>) row.get("topicsWithTags"),
+            messages, cypherWriter);
+        cnvsResult.close();
+      } else { // special case: given the very 1st prompt msg
+        cnvsResult.close();
+        final Result p0Result = tx.execute(
+            "MATCH (h:Message) WHERE elementId(h) = $msgEID"
+                + " CALL {"
+                + "    WITH h"
+                + "    OPTIONAL MATCH (t:Topic)-[:INITIATES]->(h)"
+                + "    OPTIONAL MATCH (t)-[:HAS_TAG]->(tg:Tag)"
+                + "    WITH t, COLLECT(DISTINCT tg) AS tags"
+                + "    RETURN t, tags"
+                + " }"
+                + " WITH COLLECT({topic: t, tags: tags}) AS topicsWithTags"
+                + " RETURN topicsWithTags",
+            Map.of("msgEID", tipMsg.getElementId()));
+        assert p0Result.hasNext() : "bug?!";
+        final Map<String, Object> row = p0Result.next();
+        prepareSnapshot(Collections.singleton(tipMsg), (List<?>) row.get("topicsWithTags"),
+            messages, cypherWriter);
+        p0Result.close();
       }
       assert messages.size() >= 1 : "At least a system prompt message should precede the selected quest message";
 
@@ -176,6 +126,82 @@ public class Chat {
       log.error("Error snapshotting the conversation", exc);
     }
     return Stream.empty();
+  }
+
+  protected void prepareSnapshot(Iterable<Node> nodes, List<?> topicsWithTags,
+      List<Message> messages, StringWriter cypherWriter) throws IOException {
+    for (final Node m : nodes) {
+      final Message msg = Message.fromNode(m);
+      messages.add(msg);
+      final int msgNo = messages.size();
+
+      cypherWriter.write("MERGE (m" + msgNo);
+      cypherWriter.write(":Message {msgid: ");
+      jsonMapper.writeValue(cypherWriter, (String) m.getProperty("msgid"));
+      cypherWriter.write("}) SET m" + msgNo + ".timestamp=datetime(");
+      jsonMapper.writeValue(cypherWriter, m.getProperty("timestamp").toString());
+      cypherWriter.write("), m" + msgNo + ".role=");
+      jsonMapper.writeValue(cypherWriter, msg.role);
+      if (msg.content != null) {
+        cypherWriter.write(", m" + msgNo + ".content=");
+        jsonMapper.writeValue(cypherWriter, msg.content);
+      }
+      if (msg.tool_calls != null) {
+        cypherWriter.write(", m" + msgNo + ".tool_calls=[");
+        for (final var tc : msg.tool_calls) {
+          cypherWriter.write("{ id: ");
+          jsonMapper.writeValue(cypherWriter, tc.id);
+          cypherWriter.write(", type: ");
+          jsonMapper.writeValue(cypherWriter, tc.type);
+          cypherWriter.write(", function: { name: ");
+          jsonMapper.writeValue(cypherWriter, tc.function.get("name"));
+          cypherWriter.write(", arguments: ");
+          jsonMapper.writeValue(cypherWriter, tc.function.get("arguments"));
+          cypherWriter.write(" } }");
+        }
+        cypherWriter.write("]");
+      }
+      if (msg.tool_call_id != null) {
+        cypherWriter.write(", m" + msgNo + ".tool_call_id=");
+        jsonMapper.writeValue(cypherWriter, msg.tool_call_id);
+      }
+      cypherWriter.write("\n");
+      if (msgNo > 1) {
+        cypherWriter.write("MERGE (m" + (msgNo - 1));
+        cypherWriter.write(")-[:DECOHERES]->(m" + msgNo);
+        cypherWriter.write(")\n");
+      }
+
+      cypherWriter.write("\n");
+    }
+    assert messages.size() >= 1 : "at least self msg node should be there, bug?!";
+
+    int topicNo = 1;
+    for (final var entry : topicsWithTags) {
+      final Map<?, ?> tr = (Map<?, ?>) entry;
+      final Node topic = (Node) tr.get("topic");
+
+      cypherWriter.write("MERGE (t" + topicNo);
+      cypherWriter.write(":Topic { summary: ");
+      jsonMapper.writeValue(cypherWriter, (String) topic.getProperty("summary"));
+      cypherWriter.write(", description: ");
+      jsonMapper.writeValue(cypherWriter, (String) topic.getProperty("description"));
+      cypherWriter.write(" })-[:INITIATES]->(m1)\n");
+
+      final List<?> tags = (List<?>) tr.get("tags");
+      for (final var t : tags) {
+        final Node tag = (Node) t;
+        cypherWriter.write("MERGE (t" + topicNo);
+        cypherWriter.write(")-[:HAS_TAG]->(:Tag { name: ");
+        jsonMapper.writeValue(cypherWriter, (String) tag.getProperty("name"));
+        cypherWriter.write(", description: ");
+        jsonMapper.writeValue(cypherWriter, (String) tag.getProperty("description"));
+        cypherWriter.write(" })\n");
+      }
+
+      topicNo++;
+      cypherWriter.write("\n");
+    }
   }
 
   @JsonInclude(JsonInclude.Include.NON_NULL)
