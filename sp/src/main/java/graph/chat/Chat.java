@@ -3,11 +3,9 @@ package graph.chat;
 import java.io.IOException;
 import java.io.StringWriter;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
-import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import org.neo4j.graphdb.Node;
@@ -147,19 +145,8 @@ public class Chat {
         jsonMapper.writeValue(cypherWriter, msg.content);
       }
       if (msg.tool_calls != null) {
-        cypherWriter.write(", m" + msgNo + ".tool_calls=[");
-        for (final var tc : msg.tool_calls) {
-          cypherWriter.write("{ id: ");
-          jsonMapper.writeValue(cypherWriter, tc.id);
-          cypherWriter.write(", type: ");
-          jsonMapper.writeValue(cypherWriter, tc.type);
-          cypherWriter.write(", function: { name: ");
-          jsonMapper.writeValue(cypherWriter, tc.function.get("name"));
-          cypherWriter.write(", arguments: ");
-          jsonMapper.writeValue(cypherWriter, tc.function.get("arguments"));
-          cypherWriter.write(" } }");
-        }
-        cypherWriter.write("]");
+        cypherWriter.write(", m" + msgNo + ".tool_calls=");
+        jsonMapper.writeValue(cypherWriter, msg.tool_calls);
       }
       if (msg.tool_call_id != null) {
         cypherWriter.write(", m" + msgNo + ".tool_call_id=");
@@ -217,52 +204,46 @@ public class Chat {
       return new Message("tool", content, null, tool_call_id);
     }
 
-    public void updateToNode(final Node m) {
+    public void updateToNode(final Node m) throws IOException {
       m.setProperty("role", role);
       if (content != null) {
         m.setProperty("content", content);
       }
       if (tool_calls != null) {
-        m.setProperty("tool_calls",
-            Arrays.stream(tool_calls).map(ToolCall::toMap)
-                .collect(Collectors.toList()));
+        final String[] tca = new String[tool_calls.length];
+        for (int i = 0; i < tca.length; i++) {
+          tca[i] = jsonMapper.writeValueAsString(tool_calls[i]);
+        }
+        m.setProperty("tool_calls", tca);
       }
       if (tool_call_id != null) {
         m.setProperty("tool_call_id", tool_call_id);
       }
     }
 
-    public static Message fromNode(final Node m) {
+    public static Message fromNode(final Node m) throws IOException {
       final String role = (String) m.getProperty("role");
       final String content = (String) m.getProperty("content", null);
       ToolCall[] tool_calls = null;
-      final var tcs = (List<?>) m.getProperty("tool_calls", null);
-      if (tcs != null) {
-        tool_calls = tcs.stream().map(
-            tcm -> ToolCall.fromMap((Map<?, ?>) tcm)).toArray(ToolCall[]::new);
+      final var tca = (Object[]) m.getProperty("tool_calls", null);
+      if (tca != null) {
+        tool_calls = new ToolCall[tca.length];
+        for (int i = 0; i < tool_calls.length; i++) {
+          tool_calls[i] = jsonMapper.readValue((String) tca[i], ToolCall.class);
+        }
       }
       final String tool_call_id = (String) m.getProperty("tool_call_id", null);
       return new Message(role, content, tool_calls, tool_call_id);
-
     }
   }
 
+  @JsonInclude(JsonInclude.Include.NON_NULL)
   public static record ToolCall(String id, String type,
-      Map<String, Object> function) {
+      Function function) {
+  }
 
-    public Map<String, Object> toMap() {
-      return Map.of("id", id, "type", type, "function", function);
-    }
-
-    public static ToolCall fromMap(Map<?, ?> m) {
-      final Map<?, ?> function = (Map<?, ?>) m.get("function");
-      return new ToolCall(
-          (String) m.get("id"),
-          (String) m.get("type"),
-          Map.of("name", (String) function.get("name"),
-              "arguments", (String) function.get("arguments")));
-    }
-
+  @JsonInclude(JsonInclude.Include.NON_NULL)
+  public static record Function(String name, String arguments) {
   }
 
 }
