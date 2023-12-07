@@ -2,11 +2,13 @@ package graph.chat;
 
 import java.io.IOException;
 import java.io.StringWriter;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Stream;
+import java.util.zip.CRC32;
 
 import org.neo4j.graphdb.Node;
 import org.neo4j.graphdb.Path;
@@ -24,6 +26,13 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 public class Chat {
+
+  public static long signature(String... inputs) {
+    CRC32 crc32 = new CRC32();
+    for (final var input : inputs)
+      crc32.update(input.getBytes(StandardCharsets.UTF_8));
+    return crc32.getValue();
+  }
 
   public static final ObjectMapper jsonMapper = new ObjectMapper();
 
@@ -101,18 +110,21 @@ public class Chat {
       }
       assert messages.size() >= 1 : "At least a system prompt message should precede the selected quest message";
 
+      final String json = jsonMapper.writeValueAsString(messages);
+      final String cypher = cypherWriter.toString();
       final Result ssResult = tx.execute(
           "MATCH (m:Message) WHERE elementId(m) = $msgEID"
-              + " MERGE (m)-[r:SNAPSHOT]->(cnvs:Conversation{ msgid: $msgid, json: $json })"
-              + " ON CREATE SET "
+              + " MERGE (m)-[r:SNAPSHOT]->(cnvs:Conversation{ msgid: $msgid, sig: $sig }) SET"
               + "   cnvs.timestamp = datetime({epochMillis: timestamp()}),"
-              + "   cnvs.cypher = $cypher"
+              + "   cnvs.cypher = $cypher,"
+              + "   cnvs.json = $json"
               + " RETURN cnvs, r",
           Map.of(
               "msgEID", tipMsg.getElementId(),
               "msgid", tipMsg.getProperty("msgid"),
-              "json", jsonMapper.writeValueAsString(messages),
-              "cypher", cypherWriter.toString()));
+              "sig", signature(json, cypher),
+              "json", json,
+              "cypher", cypher));
       assert ssResult.hasNext() : "MERGE can fail?!";
       final var ssRecord = ssResult.next();
       final var cnvs = (Node) ssRecord.get("cnvs");

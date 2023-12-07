@@ -4,7 +4,7 @@ CREATE CONSTRAINT IF NOT EXISTS
 
 CREATE INDEX IF NOT EXISTS
   FOR (cnvs:Conversation)
-  ON (cnvs.msgid, cnvs.json)
+  ON (cnvs.msgid, cnvs.sig)
 ;
 
 MERGE (topic0:Topic {

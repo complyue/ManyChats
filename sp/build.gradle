@@ -8,7 +8,7 @@ base {
 }
 
 group = 'graph.chat'
-version = '0.1.1'
+version = '0.1.2'
 description = """Neo4j customizations to enable ChatGPT conversations with a graph as backing storage & historic log"""
 
 ext {
