@@ -50,7 +50,7 @@
       "labels": [
         "Message"
       ],
-      "lastEditedAt": 1701678917576,
+      "lastEditedAt": 1701874427422,
       "name": "Message",
       "properties": [
         {
@@ -72,6 +72,16 @@
           "dataType": "DateTime",
           "exclude": false,
           "name": "timestamp"
+        },
+        {
+          "dataType": "array",
+          "exclude": false,
+          "name": "tool_calls"
+        },
+        {
+          "dataType": "string",
+          "exclude": false,
+          "name": "tool_call_id"
         }
       ],
       "size": 1,
@@ -472,11 +482,6 @@
     ],
     "Message": [
       {
-        "dataType": "string",
-        "propertyKey": "role",
-        "type": "Message"
-      },
-      {
         "dataType": "DateTime",
         "propertyKey": "timestamp",
         "type": "Message"
@@ -490,17 +495,22 @@
         "dataType": "string",
         "propertyKey": "msgid",
         "type": "Message"
+      },
+      {
+        "dataType": "string",
+        "propertyKey": "role",
+        "type": "Message"
       }
     ],
     "Tag": [
       {
         "dataType": "string",
-        "propertyKey": "description",
+        "propertyKey": "name",
         "type": "Tag"
       },
       {
         "dataType": "string",
-        "propertyKey": "name",
+        "propertyKey": "description",
         "type": "Tag"
       }
     ],
@@ -528,15 +538,15 @@
             "metadataProp": false
           },
           {
-            "key": "role",
-            "metadataProp": true
-          },
-          {
             "key": "timestamp",
             "metadataProp": true
           },
           {
             "key": "content",
+            "metadataProp": true
+          },
+          {
+            "key": "role",
             "metadataProp": true
           }
         ],
@@ -567,11 +577,11 @@
         "label": "Tag",
         "propertyKeys": [
           {
-            "key": "description",
+            "key": "name",
             "metadataProp": true
           },
           {
-            "key": "name",
+            "key": "description",
             "metadataProp": true
           }
         ],
@@ -626,10 +636,10 @@
     "stats": {
       "labels": {},
       "relationshipTypes": {
-        "DECOHERES": 2,
+        "DECOHERES": 12,
         "HAS_TAG": 1,
         "INITIATES": 1,
-        "SNAPSHOT": 1
+        "SNAPSHOT": 3
       }
     }
   },
@@ -774,15 +784,25 @@
   ],
   "sceneActions": [
     {
+      "categories": null,
+      "createdAt": 1701791297961,
+      "cypher": "MATCH (q:Message {role: 'user'}) WHERE id(q) in $nodes\n\nCALL chat.ask(q, 'gpt-4-1106-preview') YIELD ans, r\n\n// Every time you visit the definition of this scene action,\n// mind to check the \"Write transaction\" box above, or this scene action will do nothing.\n// If no that checkbox there, you need to enable experimental features of Bloom: \"Allow write transactions\".\n// If unable to do above, just leave the line below uncommented\nMERGE (q)-[r1:DECOHERES]->(ans)\n\nRETURN ans, r\n",
+      "hasCypherErrors": false,
+      "id": "b578f280-9385-11ee-abea-05ee7c30fc0e",
+      "isUpdateQuery": true,
+      "name": "Quest gpt-4-1106-preview",
+      "relationshipTypes": null
+    },
+    {
       "categories": [
         3
       ],
       "createdAt": 1701074378953,
-      "cypher": "MATCH (q:Message {role: 'user'}) WHERE id(q) in $nodes\n\nCALL chat.ask(q) YIELD ans, r\n\n// Every time you visit the definition of this scene action,\n// mind to check the \"Write transaction\" box above, or this scene action will do nothing.\n// If no that checkbox there, you need to enable experimental features of Bloom: \"Allow write transactions\".\n// If unable to do above, just leave the line below uncommented\nMERGE (q)-[r1:DECOHERES]->(ans)\n\nRETURN ans, r\n",
+      "cypher": "MATCH (q:Message {role: 'user'}) WHERE id(q) in $nodes\n\nCALL chat.ask(q, 'gpt-3.5-turbo') YIELD ans, r\n\n// Every time you visit the definition of this scene action,\n// mind to check the \"Write transaction\" box above, or this scene action will do nothing.\n// If no that checkbox there, you need to enable experimental features of Bloom: \"Allow write transactions\".\n// If unable to do above, just leave the line below uncommented\nMERGE (q)-[r1:DECOHERES]->(ans)\n\nRETURN ans, r\n",
       "hasCypherErrors": false,
       "id": "80719d70-8d00-11ee-80f3-e9a24a5b2848",
       "isUpdateQuery": true,
-      "name": "Quest GPT",
+      "name": "Quest gpt-3.5-turbo",
       "relationshipTypes": null
     },
     {
@@ -864,16 +884,56 @@
   ],
   "templates": [
     {
-      "createdAt": 1700754621840,
-      "cypher": "MATCH (m:Message)\nWHERE NOT (m)-[:DECOHERES]->(:Message)\nRETURN m\nORDER BY m.timestamp DESC\nLIMIT $number\n",
+      "createdAt": 1701937016777,
+      "cypher": "MATCH (m:Message {msgid: $msgid})\n\nCALL chat.snapshot(m) YIELD cnvs, r\n// make Bloom believe this may do writes, thus use a write tx for the phrase\nMERGE (m)-[:SNAPSHOT]->(cnvs)\n\nRETURN m, cnvs, r\n",
       "hasCypherErrors": false,
-      "id": "tmpl:1700754621840",
-      "isUpdateQuery": false,
-      "name": "Show messages recently made at tip of conversations",
+      "id": "tmpl:1701937016777",
+      "isUpdateQuery": true,
+      "name": "Show the tip message with its up-to-date snapshot, of the specified conversation",
       "params": [
         {
           "collapsed": false,
-          "cypher": "UNWIND [10, 200, 500] AS n\nRETURN n\n",
+          "cypher": null,
+          "dataType": "String",
+          "name": "$msgid",
+          "suggestionBoolean": false,
+          "suggestionLabel": "Message",
+          "suggestionProp": "msgid"
+        }
+      ],
+      "text": "Show conversation snapshot of $msgid"
+    },
+    {
+      "createdAt": 1701936622117,
+      "cypher": "MATCH (m:Message {msgid: $msgid})\n\nMATCH p = (h:Message)-[:DECOHERES*]->(m:Message)\nWHERE NOT (:Message)-[:DECOHERES]->(h)\n\nOPTIONAL MATCH tp = (t:Topic)-[:INITIATES]->(h)\nOPTIONAL MATCH tgp = (t)-[:HAS_TAG]->(tg:Tag)\n\nRETURN p, tp, tgp\n",
+      "hasCypherErrors": false,
+      "id": "tmpl:1701936622117",
+      "isUpdateQuery": false,
+      "name": "Show full graph of the specified conversation",
+      "params": [
+        {
+          "collapsed": false,
+          "cypher": null,
+          "dataType": "String",
+          "name": "$msgid",
+          "suggestionBoolean": false,
+          "suggestionLabel": "Message",
+          "suggestionProp": "msgid"
+        }
+      ],
+      "text": "Show conversation graph of $msgid"
+    },
+    {
+      "createdAt": 1700754621840,
+      "cypher": "MATCH (m:Message)\nWHERE NOT (m)-[:DECOHERES]->(:Message)\nWITH m\nORDER BY m.timestamp DESC\nLIMIT $number\n\nMATCH p = (h:Message)-[:DECOHERES*]->(m:Message)\nWHERE NOT (:Message)-[:DECOHERES]->(h)\n\nOPTIONAL MATCH tp = (t:Topic)-[:INITIATES]->(h)\nOPTIONAL MATCH tgp = (t)-[:HAS_TAG]->(tg:Tag)\n\nRETURN p, tp, tgp\n",
+      "hasCypherErrors": false,
+      "id": "tmpl:1700754621840",
+      "isUpdateQuery": false,
+      "name": "Show a number of conversations recently updated",
+      "params": [
+        {
+          "collapsed": false,
+          "cypher": "UNWIND [10, 20, 50, 100, 200] AS n\nRETURN n\n",
           "dataType": "Integer",
           "name": "$number",
           "suggestionBoolean": false,
@@ -881,7 +941,7 @@
           "suggestionProp": null
         }
       ],
-      "text": "Show recent $number conversation tips"
+      "text": "Show $number recent conversations"
     },
     {
       "createdAt": 1700754358560,
