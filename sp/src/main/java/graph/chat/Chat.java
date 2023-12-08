@@ -158,7 +158,10 @@ public class Chat {
       }
       if (msg.tool_calls != null) {
         cypherWriter.write(", m" + msgNo + ".tool_calls=");
-        jsonMapper.writeValue(cypherWriter, msg.tool_calls);
+        final String[] tcs = new String[msg.tool_calls.length];
+        for (int i = 0; i < tcs.length; i++)
+          tcs[i] = jsonMapper.writeValueAsString(msg.tool_calls[i]);
+        jsonMapper.writeValue(cypherWriter, tcs);
       }
       if (msg.tool_call_id != null) {
         cypherWriter.write(", m" + msgNo + ".tool_call_id=");
