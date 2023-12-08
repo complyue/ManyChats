@@ -8,7 +8,8 @@ CREATE INDEX IF NOT EXISTS
 ;
 
 MERGE (topic0:Topic {
-  summary: 'Many Chats',
+  title: 'ManyChats',
+  summary: 'Many Chats like Many Worlds',
   description: trim("
 Chats as branches of conversational messages, naturally form a graph structure: 
 

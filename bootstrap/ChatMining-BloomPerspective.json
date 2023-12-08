@@ -315,7 +315,7 @@
       "labels": [
         "Conversation"
       ],
-      "lastEditedAt": 1701355325151,
+      "lastEditedAt": 1702032513547,
       "name": "Conversation",
       "properties": [
         {
@@ -337,6 +337,11 @@
           "dataType": "DateTime",
           "exclude": false,
           "name": "timestamp"
+        },
+        {
+          "dataType": "bigint",
+          "exclude": false,
+          "name": "sig"
         }
       ],
       "size": 2,
@@ -353,6 +358,14 @@
           "key": "Topic",
           "styles": [],
           "type": "label"
+        },
+        {
+          "inTooltip": false,
+          "isCaption": true,
+          "isGdsData": false,
+          "key": "title",
+          "styles": [],
+          "type": "property"
         },
         {
           "inTooltip": false,
@@ -378,7 +391,7 @@
       "labels": [
         "Topic"
       ],
-      "lastEditedAt": 1701355275377,
+      "lastEditedAt": 1702029935497,
       "name": "Topic",
       "properties": [
         {
@@ -390,6 +403,11 @@
           "dataType": "string",
           "exclude": false,
           "name": "summary"
+        },
+        {
+          "dataType": "string",
+          "exclude": false,
+          "name": "title"
         }
       ],
       "size": 4,
@@ -451,17 +469,22 @@
       "textSize": 1
     }
   ],
-  "createdAt": 1701678664730,
+  "createdAt": 1702029894068,
   "hiddenCategories": [],
   "hiddenRelationshipTypes": [],
   "hideUncategorisedData": false,
-  "id": "e4ab52c0-8f9b-11ee-8cd3-77496851a9c5",
+  "id": "3bd5ee50-95b1-11ee-9bab-27fae61bdd27",
   "isAuto": true,
   "labels": {
     "Conversation": [
       {
-        "dataType": "DateTime",
-        "propertyKey": "timestamp",
+        "dataType": "string",
+        "propertyKey": "json",
+        "type": "Conversation"
+      },
+      {
+        "dataType": "bigint",
+        "propertyKey": "sig",
         "type": "Conversation"
       },
       {
@@ -470,8 +493,8 @@
         "type": "Conversation"
       },
       {
-        "dataType": "string",
-        "propertyKey": "json",
+        "dataType": "DateTime",
+        "propertyKey": "timestamp",
         "type": "Conversation"
       },
       {
@@ -482,6 +505,11 @@
     ],
     "Message": [
       {
+        "dataType": "string",
+        "propertyKey": "msgid",
+        "type": "Message"
+      },
+      {
         "dataType": "DateTime",
         "propertyKey": "timestamp",
         "type": "Message"
@@ -489,11 +517,6 @@
       {
         "dataType": "string",
         "propertyKey": "content",
-        "type": "Message"
-      },
-      {
-        "dataType": "string",
-        "propertyKey": "msgid",
         "type": "Message"
       },
       {
@@ -517,6 +540,11 @@
     "Topic": [
       {
         "dataType": "string",
+        "propertyKey": "title",
+        "type": "Topic"
+      },
+      {
+        "dataType": "string",
         "propertyKey": "description",
         "type": "Topic"
       },
@@ -527,7 +555,7 @@
       }
     ]
   },
-  "lastEditedAt": 1701678664730,
+  "lastEditedAt": 1702029894068,
   "metadata": {
     "indexes": [
       {
@@ -559,8 +587,39 @@
       },
       {
         "isMetadataPropIndex": true,
+        "label": "Conversation",
+        "propertyKeys": [
+          {
+            "key": "json",
+            "metadataProp": true
+          },
+          {
+            "key": "sig",
+            "metadataProp": true
+          },
+          {
+            "key": "msgid",
+            "metadataProp": true
+          },
+          {
+            "key": "timestamp",
+            "metadataProp": true
+          },
+          {
+            "key": "cypher",
+            "metadataProp": true
+          }
+        ],
+        "type": "native"
+      },
+      {
+        "isMetadataPropIndex": true,
         "label": "Topic",
         "propertyKeys": [
+          {
+            "key": "title",
+            "metadataProp": true
+          },
           {
             "key": "description",
             "metadataProp": true
@@ -582,29 +641,6 @@
           },
           {
             "key": "description",
-            "metadataProp": true
-          }
-        ],
-        "type": "native"
-      },
-      {
-        "isMetadataPropIndex": true,
-        "label": "Conversation",
-        "propertyKeys": [
-          {
-            "key": "timestamp",
-            "metadataProp": true
-          },
-          {
-            "key": "msgid",
-            "metadataProp": true
-          },
-          {
-            "key": "json",
-            "metadataProp": true
-          },
-          {
-            "key": "cypher",
             "metadataProp": true
           }
         ],
@@ -636,10 +672,10 @@
     "stats": {
       "labels": {},
       "relationshipTypes": {
-        "DECOHERES": 12,
+        "DECOHERES": 14,
         "HAS_TAG": 1,
         "INITIATES": 1,
-        "SNAPSHOT": 3
+        "SNAPSHOT": 5
       }
     }
   },
@@ -663,7 +699,7 @@
     ],
     "currentIndex": 5
   },
-  "parentPerspectiveId": "6acf1130-8ec9-11ee-b834-3358bed118c0",
+  "parentPerspectiveId": "e4ab52c0-8f9b-11ee-8cd3-77496851a9c5",
   "relationshipTypes": [
     {
       "captionKeys": [],
