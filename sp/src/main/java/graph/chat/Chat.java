@@ -184,7 +184,9 @@ public class Chat {
       final Node topic = (Node) tr.get("topic");
 
       cypherWriter.write("MERGE (t" + topicNo);
-      cypherWriter.write(":Topic { summary: ");
+      cypherWriter.write(":Topic { title: ");
+      jsonMapper.writeValue(cypherWriter, (String) topic.getProperty("title"));
+      cypherWriter.write(", summary: ");
       jsonMapper.writeValue(cypherWriter, (String) topic.getProperty("summary"));
       cypherWriter.write(", description: ");
       jsonMapper.writeValue(cypherWriter, (String) topic.getProperty("description"));
